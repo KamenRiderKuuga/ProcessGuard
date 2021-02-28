@@ -191,5 +191,59 @@ namespace ProcessGuard.Common.Utility
             return result;
         }
 
+        /// <summary>
+        /// 执行命令行并且获取输出的内容(包括输出内容和错误内容)
+        /// </summary>
+        /// <param name="cmd">命令行内容</param>
+        public static bool RunCmdAndGetOutput(string cmd, out string output, out string error)
+        {
+            using (var process = new Process())
+            {
+                output = "";
+                error = "";
+                string outputContent = "";
+                string outputError = "";
+                ProcessStartInfo processInfo = new ProcessStartInfo();
+                // 隐藏可视化界面
+                processInfo.CreateNoWindow = true;
+                processInfo.UseShellExecute = false;
+                // 对标准输出流和错误流进行重定向
+                processInfo.RedirectStandardOutput = true;
+                processInfo.RedirectStandardError = true;
+                process.OutputDataReceived += (_, e) =>
+                {
+                    outputContent += e.Data;
+                };
+                process.ErrorDataReceived += (_, e) =>
+                {
+                    outputError += e.Data;
+                };
+
+                // 对标准输入流进行重定向
+                processInfo.RedirectStandardInput = true;
+                processInfo.FileName = "cmd.exe";
+                processInfo.Arguments = cmd;
+                processInfo.Verb = "runas"; // 提升cmd程序的权限
+                process.StartInfo = processInfo;
+
+                if (!process.Start())
+                {
+                    return false;
+                }
+
+                process.StandardInput.WriteLine(cmd);
+                process.StandardInput.WriteLine("exit");
+
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                process.WaitForExit();
+
+                output = outputContent;
+                error = outputError;
+
+                return true;
+            }
+        }
     }
 }

@@ -23,8 +23,7 @@ namespace ProcessGuard.Common.Utility
             }
 
             var json = File.ReadAllText(Constants.CONFIG_FILE_NAME);
-            result = JsonConvert.DeserializeObject<ObservableCollection<ConfigItem>>(json);
-
+            result = json.DeserializeObject<ObservableCollection<ConfigItem>>();
 
             return result ?? new ObservableCollection<ConfigItem>();
         }
@@ -36,7 +35,7 @@ namespace ProcessGuard.Common.Utility
         /// <param name="configItems">配置项实体集合</param>
         public static void SaveConfigs(ObservableCollection<ConfigItem> configItems)
         {
-            File.WriteAllText(Constants.CONFIG_FILE_NAME, JsonConvert.SerializeObject(configItems));
+            File.WriteAllText(Constants.CONFIG_FILE_NAME, configItems.Serialize());
         }
     }
 }

@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         Title="进程守护服务配置" TitleAlignment="Center" Height="300" Width="600"
-        WindowStartupLocation="CenterScreen"       
+        WindowStartupLocation="CenterScreen"
+        Icon="cola.ico"
         ShowIconOnTitleBar="True"
         ShowTitleBar="True"
         ShowDialogsOverTitleBar="False"         
@@ -126,17 +127,17 @@
                   ItemsSource="{Binding Path=ConfigItems}"
                   RowHeaderWidth="0">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="FullPathColumn" Width="2*" Binding="{Binding EXEFullPath}" Header="完整路径">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
-                            <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
                 <DataGridTextColumn Width="*" Binding="{Binding ProcessName}" Header="进程名称">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
                             <Setter Property="ToolTip" Value="{Binding ProcessName}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn x:Name="FullPathColumn" Width="2*" Binding="{Binding EXEFullPath}" Header="完整路径">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                            <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -155,6 +156,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="30" />
@@ -196,7 +198,8 @@
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
                         ToolTip="启动守护服务"
-                        Click="Button_Click">
+                        Click="Button_Click"
+                        IsEnabled="{Binding CanStart}">
                     <iconPacks:PackIconModern Width="16"
                                               Height="16"
                                               Kind="ControlPlay"/>
@@ -208,13 +211,27 @@
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
                         ToolTip="停止守护服务"
-                        Click="Button_Click">
+                        Click="Button_Click"
+                        IsEnabled="{Binding CanStop}">
                     <iconPacks:PackIconModern Width="12"
                                               Height="12"
                                               Kind="ControlStop"/>
                 </Button>
             </StatusBarItem>
             <StatusBarItem Grid.Column="4">
+                <Button x:Name="btnUninstall" Width="23"
+                        Height="23"
+                        Margin="0"
+                        Style="{StaticResource AccentCircleButtonStyle}"
+                        ToolTip="卸载守护服务"
+                        Click="Button_Click"
+                        IsEnabled="{Binding CanUnistall}">
+                    <iconPacks:PackIconModern Width="16"
+                                              Height="16"
+                                              Kind="AppRemove"/>
+                </Button>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="5">
                 <Button x:Name="btnAdd" Width="23"
                         Height="23"
                         Margin="0"
@@ -226,7 +243,7 @@
                                               Kind="Add"/>
                 </Button>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="5">
+            <StatusBarItem Grid.Column="6">
                 <Button x:Name="btnMinus" Width="23"
                         Height="23"
                         Margin="0"

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessGuard.Common", "Proc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessGuardService", "ProcessGuardService\ProcessGuardService.csproj", "{CEE80E8A-5787-4103-A639-A0D236FD1190}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessGuard.CommonTests", "ProcessGuard.CommonTests\ProcessGuard.CommonTests.csproj", "{6061213A-B8D9-489C-B5B7-C8DD3DE87C44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CEE80E8A-5787-4103-A639-A0D236FD1190}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEE80E8A-5787-4103-A639-A0D236FD1190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEE80E8A-5787-4103-A639-A0D236FD1190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6061213A-B8D9-489C-B5B7-C8DD3DE87C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6061213A-B8D9-489C-B5B7-C8DD3DE87C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6061213A-B8D9-489C-B5B7-C8DD3DE87C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6061213A-B8D9-489C-B5B7-C8DD3DE87C44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

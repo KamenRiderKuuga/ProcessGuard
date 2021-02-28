@@ -29,18 +29,39 @@ namespace ProcessGuardService
 
         private void StartGuardian()
         {
+            var configList = ConfigHelper.LoadConfigFile();
+
             while (true)
             {
-                Thread.Sleep(1000);
-                var currentProcesses = Process.GetProcessesByName("Everything");
+                Thread.Sleep(5000);
 
-                if (currentProcesses?.Length == 0)
+                for (int index = configList.Count - 1; index >= 0; index--)
                 {
-                    var startFilePath = @"E:\Program Files\Everything-1.4.1.1005.x64\Everything.exe";
+                    var config = configList[index];
 
-                    if (File.Exists(startFilePath))
+                    var currentProcesses = Process.GetProcessesByName(config.ProcessName);
+
+                    if (currentProcesses?.Length == 0)
                     {
-                        ApplicationLoader.StartProcessAndBypassUAC(startFilePath, Path.GetDirectoryName(startFilePath), out var _);
+                        var startFilePath = config.EXEFullPath;
+
+                        if (File.Exists(startFilePath))
+                        {
+                            ApplicationLoader.StartProcessAndBypassUAC(startFilePath, Path.GetDirectoryName(startFilePath), out var _);
+                            if (config.OnlyOpenOnce)
+                            {
+                                configList.Remove(config);
+                            }
+                        }
+
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        foreach (var process in currentProcesses)
+                        {
+                            process.Dispose();
+                        }
                     }
                 }
             }

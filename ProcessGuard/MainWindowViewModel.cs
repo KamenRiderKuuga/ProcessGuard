@@ -74,6 +74,80 @@ namespace ProcessGuard
             set { this.Set(ref this._isOnlyOpenOnce, value); }
         }
 
+        private bool _canStart;
+
+        /// <summary>
+        /// 是否可以点击开始按钮
+        /// </summary>
+        public bool CanStart
+        {
+            get { return _canStart; }
+            set { this.Set(ref this._canStart, value); }
+        }
+
+        private bool _canStop;
+
+        /// <summary>
+        /// 是否可以点击停止按钮
+        /// </summary>
+        public bool CanStop
+        {
+            get { return _canStop; }
+            set { this.Set(ref this._canStop, value); }
+        }
+
+        private bool _canUnistall;
+
+        /// <summary>
+        /// 是否可以点击卸载按钮
+        /// </summary>
+        public bool CanUnistall
+        {
+            get { return _canUnistall; }
+            set { this.Set(ref this._canUnistall, value); }
+        }
+
+        private bool? _isRun;
+
+        /// <summary>
+        /// 设置服务运行状态
+        /// </summary>
+        public bool? IsRun
+        {
+            get { return _isRun; }
+            set
+            {
+                if (_isRun == value)
+                {
+                    return;
+                }
+
+                _isRun = value;
+
+                switch (value)
+                {
+                    case true:
+                        CanStart = false;
+                        CanStop = true;
+                        CanUnistall = true;
+                        break;
+
+                    case false:
+                        CanStart = true;
+                        CanStop = false;
+                        CanUnistall = true;
+                        break;
+
+                    default:
+                        CanStart = true;
+                        CanStop = false;
+                        CanUnistall = false;
+                        break;
+                }
+            }
+        }
+
+
         [Description("Test-Property")]
         public string Error => string.Empty;
 
