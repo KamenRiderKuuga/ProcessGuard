@@ -35,6 +35,7 @@ namespace ProcessGuard
             this.MetroDialogOptions.AnimateShow = true;
             this.MetroDialogOptions.AnimateHide = false;
             _mainWindowViewModel.ConfigItems = ConfigHelper.LoadConfigFile();
+            _mainWindowViewModel.IsRun = _mainWindowViewModel.IsRun == true ? false : true;
             _checkTimer = new Timer();
             _checkTimer.Elapsed += CheckTimer_Elapsed;
             _checkTimer.Start();
@@ -148,7 +149,10 @@ namespace ProcessGuard
             if (dialogResult == MessageDialogResult.Affirmative)
             {
                 CreateServiceFile();
-                string cmd = @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe /U ProcessGuardService.exe";
+                string cmd = @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe /U ";
+                cmd += $"/LogFile={ConfigHelper.GetAppDataFilePath("myLog.InstallLog")} ";
+                cmd += ConfigHelper.GetAppDataFilePath(Constants.FILE_GUARD_SERVICE);
+
                 await Task.Run(() =>
                 {
                     ApplicationLoader.RunCmdAndGetOutput(cmd, out var _, out error);
@@ -167,9 +171,11 @@ namespace ProcessGuard
             {
                 CreateServiceFile();
 
-                string cmd = @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe ProcessGuardService.exe
-                            Net Start ProcessGuardService
-                            sc config ProcessGuardService = auto";
+                string cmd = @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe ";
+                cmd += $"/LogFile={ConfigHelper.GetAppDataFilePath("myLog.InstallLog")} ";
+                cmd += $@"{ConfigHelper.GetAppDataFilePath(Constants.FILE_GUARD_SERVICE)}
+                             Net Start ProcessGuardService
+                             sc config ProcessGuardService = auto";
 
                 await Task.Run(() =>
                 {
@@ -200,7 +206,7 @@ namespace ProcessGuard
         /// </summary>
         private void CreateServiceFile()
         {
-            var serviceFileName = nameof(Properties.Resources.ProcessGuardService) + ".exe";
+            var serviceFileName = ConfigHelper.GetAppDataFilePath(Constants.FILE_GUARD_SERVICE);
 
             // 从资源文件中拷贝出服务程序
             if (!File.Exists(serviceFileName))

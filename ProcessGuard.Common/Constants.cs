@@ -11,5 +11,10 @@
         /// 服务进程名
         /// </summary>
         public const string PROCESS_GUARD_SERVICE = "ProcessGuardService";
+
+        /// <summary>
+        /// 服务文件名
+        /// </summary>
+        public const string FILE_GUARD_SERVICE = "ProcessGuardService.exe";
     }
 }

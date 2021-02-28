@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.IO;
+using System;
 
 namespace ProcessGuard.Common.Utility
 {
@@ -15,14 +16,16 @@ namespace ProcessGuard.Common.Utility
         /// </summary>
         public static ObservableCollection<ConfigItem> LoadConfigFile()
         {
+            var configFilePath = GetAppDataFilePath(Constants.CONFIG_FILE_NAME);
+
             ObservableCollection<ConfigItem> result = null;
 
-            if (!File.Exists(Constants.CONFIG_FILE_NAME))
+            if (!File.Exists(configFilePath))
             {
-                File.WriteAllText(Constants.CONFIG_FILE_NAME, "");
+                File.WriteAllText(configFilePath, "");
             }
 
-            var json = File.ReadAllText(Constants.CONFIG_FILE_NAME);
+            var json = File.ReadAllText(configFilePath);
             result = json.DeserializeObject<ObservableCollection<ConfigItem>>();
 
             return result ?? new ObservableCollection<ConfigItem>();
@@ -35,7 +38,25 @@ namespace ProcessGuard.Common.Utility
         /// <param name="configItems">配置项实体集合</param>
         public static void SaveConfigs(ObservableCollection<ConfigItem> configItems)
         {
-            File.WriteAllText(Constants.CONFIG_FILE_NAME, configItems.Serialize());
+            var configFilePath = GetAppDataFilePath(Constants.CONFIG_FILE_NAME);
+            File.WriteAllText(configFilePath, configItems.Serialize());
+        }
+
+        /// <summary>
+        /// 获取在AppData目录的文件位置
+        /// </summary>
+        /// <param name="fileName">文件名</param>
+        /// <returns></returns>
+        public static string GetAppDataFilePath(string fileName)
+        {
+            var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Constants.PROCESS_GUARD_SERVICE);
+            
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            return Path.Combine(folderPath, fileName);
         }
     }
 }

@@ -75,7 +75,7 @@ namespace ProcessGuard.Common.Utility
         public const uint MAXIMUM_ALLOWED = 0x2000000;
         public const int CREATE_NEW_CONSOLE = 0x00000010;
         public const int CREATE_NO_WINDOW = 0x08000000;
-
+        public const int CREATE_UNICODE_ENVIRONMENT = 0x00000400;
         public const int IDLE_PRIORITY_CLASS = 0x40;
         public const int NORMAL_PRIORITY_CLASS = 0x20;
         public const int HIGH_PRIORITY_CLASS = 0x80;
@@ -110,6 +110,12 @@ namespace ProcessGuard.Common.Utility
         [DllImport("advapi32", SetLastError = true), SuppressUnmanagedCodeSecurity]
         static extern bool OpenProcessToken(IntPtr ProcessHandle, int DesiredAccess, ref IntPtr TokenHandle);
 
+        [DllImport("userenv.dll", SetLastError = true)]
+        private static extern bool CreateEnvironmentBlock(ref IntPtr lpEnvironment, IntPtr hToken, bool bInherit);
+
+        [DllImport("wtsapi32.dll", SetLastError = true)]
+        private static extern uint WTSQueryUserToken(uint SessionId, ref IntPtr phToken);
+
         #endregion
 
         /// <summary>
@@ -122,34 +128,20 @@ namespace ProcessGuard.Common.Utility
         /// <returns>创建完成的进程信息</returns>
         public static bool StartProcessAndBypassUAC(string applicationFullPath, string startingDir, out PROCESS_INFORMATION procInfo, string commandLine = null)
         {
-            uint winlogonPid = 0;
             IntPtr hUserTokenDup = IntPtr.Zero;
             IntPtr hPToken = IntPtr.Zero;
             IntPtr hProcess = IntPtr.Zero;
+            IntPtr pEnv = IntPtr.Zero;
+
             procInfo = new PROCESS_INFORMATION();
 
             // 获取当前正在使用的系统用户的session id,每一个登录到系统的用户都有一个唯一的session id
             // 这一步是为了可以正确在当前登录的用户界面启动程序
             uint dwSessionId = WTSGetActiveConsoleSessionId();
 
-            // 获取当前登录的用户的winlogon进程的进程信息
-            // winlogon进程是必定通过管理员身份启动的，并且只要用户进入系统界面就必然存在
-            Process[] processes = Process.GetProcessesByName("winlogon");
-            foreach (Process p in processes)
+            if (WTSQueryUserToken(dwSessionId, ref hPToken) == 0)
             {
-                if ((uint)p.SessionId == dwSessionId)
-                {
-                    winlogonPid = (uint)p.Id;
-                }
-            }
-
-            // 获取到winlogon进程的句柄
-            hProcess = OpenProcess(MAXIMUM_ALLOWED, false, winlogonPid);
-
-            // 使用winlogon进程的句柄获取到其访问令牌
-            if (!OpenProcessToken(hProcess, TOKEN_DUPLICATE, ref hPToken))
-            {
-                CloseHandle(hProcess);
+                CloseHandle(hPToken);
                 return false;
             }
 
@@ -167,7 +159,16 @@ namespace ProcessGuard.Common.Utility
             si.lpDesktop = @"winsta0\default";
 
             // 指定进程的优先级和创建方法，这里代表是普通优先级，并且创建方法是带有UI的进程
-            int dwCreationFlags = NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE;
+            int dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE;
+            
+            // 创建新进程的环境变量
+            if (!CreateEnvironmentBlock(ref pEnv, hUserTokenDup, false))
+            {
+                CloseHandle(hProcess);
+                CloseHandle(hPToken);
+                CloseHandle(pEnv);
+                return false;
+            }
 
             // 在当前用户的session中创建一个新进程
             bool result = CreateProcessAsUser(hUserTokenDup,        // 用户的访问令牌
@@ -177,7 +178,7 @@ namespace ProcessGuard.Common.Utility
                                             IntPtr.Zero,            // 设置线程的SECURITY_ATTRIBUTES，控制对象的访问权限，这里传空值
                                             false,                  // 开启的进程不需继承句柄
                                             dwCreationFlags,        // 创建标识
-                                            IntPtr.Zero,            // 传空，获取新的环境变量的拷贝 
+                                            pEnv,            // 传空，获取新的环境变量的拷贝 
                                             startingDir,            // 程序启动时的工作目录，通常传递要启动的程序所在目录即可 
                                             ref si,                 // 启动信息
                                             out procInfo            // 用于接收新创建的进程的信息
@@ -187,6 +188,7 @@ namespace ProcessGuard.Common.Utility
             CloseHandle(hProcess);
             CloseHandle(hPToken);
             CloseHandle(hUserTokenDup);
+            CloseHandle(pEnv);
 
             return result;
         }
