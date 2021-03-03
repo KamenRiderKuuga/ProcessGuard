@@ -267,7 +267,7 @@ namespace ProcessGuard
         {
             ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
 
-            MessageDialogResult result = await ShowMessageDialogAsync("注意", "保存配置文件成功，将在重启后生效，是否立即重启服务？");
+            MessageDialogResult result = await ShowMessageDialogAsync("注意", "保存配置文件成功，将在重启服务后生效，是否立即重启服务？");
 
             if (result == MessageDialogResult.Affirmative)
             {
