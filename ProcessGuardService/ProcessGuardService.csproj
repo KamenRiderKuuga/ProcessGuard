@@ -77,9 +77,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set ILMergeConsolePath=$(SolutionDir)packages\ILRepack.2.0.18\tools\ILRepack.exe
-%25ILMergeConsolePath%25  /out:$(SolutionDir)\ProcessGuard\Resources\ProcessGuardService.exe ProcessGuardService.exe Newtonsoft.Json.dll ProcessGuard.Common.dll
-del $(SolutionDir)\ProcessGuard\Resources\*.pdb
+    <PostBuildEvent>set ILMergeConsolePath=$(SolutionDir)packages\ILRepack.2.0.18\tools\ILRepack.exe&amp;
+%25ILMergeConsolePath%25  /out:$(SolutionDir)\ProcessGuard\Resources\ProcessGuardService.exe ProcessGuardService.exe Newtonsoft.Json.dll ProcessGuard.Common.dll&amp;
+del $(SolutionDir)\ProcessGuard\Resources\*.pdb&amp;
 del $(SolutionDir)\ProcessGuard\Resources\*.config</PostBuildEvent>
   </PropertyGroup>
 </Project>

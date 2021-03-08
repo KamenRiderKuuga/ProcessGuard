@@ -147,9 +147,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rd /s /q "output"
-mkdir output
-set ILMergeConsolePath=$(SolutionDir)packages\ILRepack.2.0.18\tools\ILRepack.exe
+    <PostBuildEvent>rd /s /q "output"&amp;
+mkdir output&amp;
+set ILMergeConsolePath=$(SolutionDir)packages\ILRepack.2.0.18\tools\ILRepack.exe&amp;
 %25ILMergeConsolePath%25  /out:output\ProcessGuard.exe ^
 ProcessGuard.exe ^
 Microsoft.Xaml.Behaviors.dll ^
@@ -158,8 +158,8 @@ MahApps.Metro.dll ^
 Newtonsoft.Json.dll ^
 ProcessGuard.Common.dll ^
 MahApps.Metro.IconPacks.Core.dll ^
-MahApps.Metro.IconPacks.Modern.dll
-del output\*.pdb
+MahApps.Metro.IconPacks.Modern.dll&amp;
+del output\*.pdb&amp;
 del output\*.config</PostBuildEvent>
   </PropertyGroup>
 </Project>
