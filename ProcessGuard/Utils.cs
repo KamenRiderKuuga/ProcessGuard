@@ -17,7 +17,7 @@ namespace ProcessGuard
             string filename = "";
 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Filter = "Excel文件 (*.exe)|*.exe;";
+            dlg.Filter = "可执行文件 (*.exe)|*.exe;";
 
             bool? result = dlg.ShowDialog();
 
