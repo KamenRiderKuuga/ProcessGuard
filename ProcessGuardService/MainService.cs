@@ -47,7 +47,7 @@ namespace ProcessGuardService
 
                         if (File.Exists(startFilePath))
                         {
-                            ApplicationLoader.StartProcessAndBypassUAC(startFilePath, Path.GetDirectoryName(startFilePath), out var _);
+                            ApplicationLoader.StartProcessInSession0(startFilePath, Path.GetDirectoryName(startFilePath), out var _);
                             if (config.OnlyOpenOnce)
                             {
                                 configList.Remove(config);

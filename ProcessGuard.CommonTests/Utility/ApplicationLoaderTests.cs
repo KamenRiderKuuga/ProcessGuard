@@ -3,6 +3,7 @@ using ProcessGuard.Common.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace ProcessGuard.Common.Utility.Tests
         public void StartAppTest()
         {
             string filePath = @"E:\Program Files\Everything-1.4.1.1005.x64\Everything.exe";
-            ApplicationLoader.StartProcessAndBypassUAC(filePath,System.IO.Path.GetDirectoryName(filePath), out var _);
+            ApplicationLoader.StartProcessInSession0(filePath,System.IO.Path.GetDirectoryName(filePath), out var _);
         }
     }
 }
