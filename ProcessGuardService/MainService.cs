@@ -19,19 +19,23 @@ namespace ProcessGuardService
             InitializeComponent();
         }
 
+        private bool _running;
+
         protected override void OnStart(string[] args)
         {
+            _running = true;
             _guardianThread = new Thread(new ThreadStart(StartGuardian));
             _guardianThread.Name = nameof(_guardianThread);
             _guardianThread.IsBackground = true;
             _guardianThread.Start();
+
         }
 
         private void StartGuardian()
         {
             var configList = ConfigHelper.LoadConfigFile();
 
-            while (true)
+            while (_running)
             {
                 Thread.Sleep(5000);
 
@@ -47,7 +51,7 @@ namespace ProcessGuardService
 
                         if (File.Exists(startFilePath))
                         {
-                            ApplicationLoader.StartProcessInSession0(startFilePath, Path.GetDirectoryName(startFilePath), out var _);
+                            ApplicationLoader.StartProcessInSession0(startFilePath, Path.GetDirectoryName(startFilePath), out var _, config.Minimize);
                             if (config.OnlyOpenOnce)
                             {
                                 configList.Remove(config);
@@ -64,6 +68,15 @@ namespace ProcessGuardService
                         }
                     }
                 }
+            }
+        }
+
+        protected override void OnStop()
+        {
+            _running = false;
+            while (_guardianThread.IsAlive)
+            {
+                Thread.Sleep(1);
             }
         }
     }

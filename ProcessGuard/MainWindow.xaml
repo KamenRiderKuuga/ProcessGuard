@@ -55,6 +55,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"></ColumnDefinition>
@@ -91,7 +92,9 @@
                                             NotifyOnValidationError=True}"></TextBox>
                     <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">仅开机自启：</TextBlock>
                     <CheckBox Margin="10 10 0 10" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <Button x:Name="btnConfirmAdd" Margin="10" Grid.Row="4" Grid.Column="2" 
+                    <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">启动时最小化：</TextBlock>
+                    <CheckBox Margin="10 10 0 10" Grid.Row="4" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
+                    <Button x:Name="btnConfirmAdd" Margin="10" Grid.Row="5" Grid.Column="2" 
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center"
@@ -99,7 +102,7 @@
                             Click="CloseCustomDialog"></Button>
                     <Button x:Name="btnCancelAdd" 
                             Margin="10"
-                            Grid.Row="4"
+                            Grid.Row="5"
                             Grid.Column="3"
                             HorizontalAlignment="Right" 
                             Width="80" 
@@ -142,6 +145,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" />
             </DataGrid.Columns>
             <DataGrid.Style>
                 <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}" TargetType="{x:Type DataGrid}">

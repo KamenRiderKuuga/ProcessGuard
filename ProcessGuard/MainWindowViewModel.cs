@@ -74,6 +74,17 @@ namespace ProcessGuard
             set { this.Set(ref this._isOnlyOpenOnce, value); }
         }
 
+        private bool _isMinimize;
+
+        /// <summary>
+        /// 当前是否勾选以最小化方式启动
+        /// </summary>
+        public bool IsMinimize
+        {
+            get { return _isMinimize; }
+            set { this.Set(ref this._isMinimize, value); }
+        }
+
         private bool _canStart;
 
         /// <summary>

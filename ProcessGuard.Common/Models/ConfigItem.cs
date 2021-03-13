@@ -46,5 +46,16 @@ namespace ProcessGuard.Common.Models
             get { return _onlyOpenOnce; }
             set { this.Set(ref this._onlyOpenOnce, value); }
         }
+
+        private bool _minimize;
+
+        /// <summary>
+        /// 是否以最小化方式启动
+        /// </summary>
+        public bool Minimize
+        {
+            get { return _minimize; }
+            set { this.Set(ref this._minimize, value); }
+        }
     }
 }

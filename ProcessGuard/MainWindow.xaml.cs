@@ -273,6 +273,8 @@ namespace ProcessGuard
             {
                 ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
                 StopService();
+                // 停止后立即开始可能会启动失败，这里延迟2秒
+                await Task.Delay(2000);
                 StartService();
             }
         }
@@ -417,6 +419,7 @@ namespace ProcessGuard
                             EXEFullPath = _mainWindowViewModel.SelectedFile,
                             ProcessName = _mainWindowViewModel.SeletedProcessName,
                             OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
+                            Minimize = _mainWindowViewModel.IsMinimize,
                         });
 
                         await this.HideMetroDialogAsync(dialog);

@@ -58,6 +58,24 @@ namespace ProcessGuard.Common.Utility
             SecurityDelegation = 3,
         }
 
+        private enum SW : int
+        {
+            SW_HIDE = 0,
+            SW_SHOWNORMAL = 1,
+            SW_NORMAL = 1,
+            SW_SHOWMINIMIZED = 2,
+            SW_SHOWMAXIMIZED = 3,
+            SW_MAXIMIZE = 3,
+            SW_SHOWNOACTIVATE = 4,
+            SW_SHOW = 5,
+            SW_MINIMIZE = 6,
+            SW_SHOWMINNOACTIVE = 7,
+            SW_SHOWNA = 8,
+            SW_RESTORE = 9,
+            SW_SHOWDEFAULT = 10,
+            SW_FORCEMINIMIZE = 11,
+        }
+
         #endregion
 
         #region Constants
@@ -66,6 +84,7 @@ namespace ProcessGuard.Common.Utility
         private const int CREATE_NEW_CONSOLE = 0x00000010;
         private const int CREATE_UNICODE_ENVIRONMENT = 0x00000400;
         private const int NORMAL_PRIORITY_CLASS = 0x20;
+        private const int STARTF_USESHOWWINDOW = 0x00000001;
 
         #endregion
 
@@ -105,9 +124,10 @@ namespace ProcessGuard.Common.Utility
         /// <param name="applicationFullPath">要启动的应用程序的完全路径</param>
         /// <param name="startingDir">程序启动时的工作目录，通常传递要启动的程序所在目录即可，特殊情况包括需要在指定的文件夹打开cmd窗口等</param>
         /// <param name="procInfo">创建完成的进程信息</param>
+        /// <param name="minimize">是否最小化窗体</param>
         /// <param name="commandLine">表示要使用的命令内容，比如需要启动一个cmd程序，因为获取其真实路径比较麻烦，此时可以直接传"cmd"，要启动的应用程序路径留空即可</param>
         /// <returns>创建完成的进程信息</returns>
-        public static bool StartProcessInSession0(string applicationFullPath, string startingDir, out PROCESS_INFORMATION procInfo, string commandLine = null)
+        public static bool StartProcessInSession0(string applicationFullPath, string startingDir, out PROCESS_INFORMATION procInfo, bool minimize = false, string commandLine = null)
         {
             IntPtr hUserTokenDup = IntPtr.Zero;
             IntPtr hPToken = IntPtr.Zero;
@@ -138,6 +158,12 @@ namespace ProcessGuard.Common.Utility
                 STARTUPINFO si = new STARTUPINFO();
                 si.cb = (int)Marshal.SizeOf(si);
                 si.lpDesktop = @"winsta0\default";
+              
+                if (minimize)
+                {
+                    si.dwFlags = STARTF_USESHOWWINDOW;
+                    si.wShowWindow = (short)SW.SW_MINIMIZE;
+                }
 
                 // 指定进程的优先级和创建方法，这里代表是普通优先级，并且创建方法是带有UI的进程
                 int dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE;
