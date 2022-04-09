@@ -30,6 +30,17 @@ namespace ProcessGuard
             set { this.Set(ref this._selectedFile, value); }
         }
 
+        private string _startupParams;
+
+        /// <summary>
+        /// 启动参数
+        /// </summary>
+        public string StartupParams
+        {
+            get { return _startupParams; }
+            set { this.Set(ref this._startupParams, value); }
+        }
+
         private string _statusColor;
 
         /// <summary>

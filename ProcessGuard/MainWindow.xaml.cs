@@ -149,13 +149,22 @@ namespace ProcessGuard
             if (dialogResult == MessageDialogResult.Affirmative)
             {
                 CreateServiceFile();
+                var servicePath = ConfigHelper.GetAppDataFilePath(Constants.FILE_GUARD_SERVICE);
                 string cmd = @"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe /U ";
                 cmd += $"/LogFile={ConfigHelper.GetAppDataFilePath("myLog.InstallLog")} ";
-                cmd += ConfigHelper.GetAppDataFilePath(Constants.FILE_GUARD_SERVICE);
+                cmd += servicePath;
 
                 await Task.Run(() =>
                 {
                     ApplicationLoader.RunCmdAndGetOutput(cmd, out var _, out error);
+                    try
+                    {
+                        File.Delete(servicePath);
+                    }
+                    catch (Exception)
+                    {
+                        // do nothing
+                    }
                 });
             }
 
@@ -417,6 +426,7 @@ namespace ProcessGuard
                         _mainWindowViewModel.ConfigItems.Add(new ConfigItem()
                         {
                             EXEFullPath = _mainWindowViewModel.SelectedFile,
+                            StartupParams = _mainWindowViewModel.StartupParams,
                             ProcessName = _mainWindowViewModel.SeletedProcessName,
                             OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
                             Minimize = _mainWindowViewModel.IsMinimize,

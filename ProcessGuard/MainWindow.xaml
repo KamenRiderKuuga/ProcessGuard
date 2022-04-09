@@ -56,6 +56,7 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"></ColumnDefinition>
@@ -94,7 +95,17 @@
                     <CheckBox Margin="10 10 0 10" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
                     <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">启动时最小化：</TextBlock>
                     <CheckBox Margin="10 10 0 10" Grid.Row="4" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <Button x:Name="btnConfirmAdd" Margin="10" Grid.Row="5" Grid.Column="2" 
+                    <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">启动参数：</TextBlock>
+                    <TextBox Margin="10" Grid.Row="5"
+                             Grid.Column="1"
+                             Grid.ColumnSpan="3"
+                             mah:TextBoxHelper.Watermark="可为空"
+                             Text="{Binding StartupParams,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource MahApps.Styles.TextBox}" 
+                             VerticalAlignment="Center">
+                    </TextBox>
+                    <Button x:Name="btnConfirmAdd" Margin="10" Grid.Row="6" Grid.Column="2" 
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center"
@@ -102,7 +113,7 @@
                             Click="CloseCustomDialog"></Button>
                     <Button x:Name="btnCancelAdd" 
                             Margin="10"
-                            Grid.Row="5"
+                            Grid.Row="6"
                             Grid.Column="3"
                             HorizontalAlignment="Right" 
                             Width="80" 
@@ -137,10 +148,17 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="FullPathColumn" Width="2*" Binding="{Binding EXEFullPath}" Header="完整路径">
+                <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}" Header="完整路径">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
                             <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding StartupParams}" Width="0.5*" Header="启动参数">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                            <Setter Property="ToolTip" Value="{Binding StartupParams}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>

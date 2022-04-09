@@ -18,6 +18,17 @@ namespace ProcessGuard.Common.Models
             set { this.Set(ref this._exeFullPath, value); }
         }
 
+        private string _startupParams;
+
+        /// <summary>
+        /// 启动参数
+        /// </summary>
+        public string StartupParams
+        {
+            get { return _startupParams; }
+            set { this.Set(ref this._startupParams, value); }
+        }
+
         private string _processName;
 
         /// <summary>
