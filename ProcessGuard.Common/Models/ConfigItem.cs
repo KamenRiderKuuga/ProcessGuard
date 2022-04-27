@@ -68,5 +68,16 @@ namespace ProcessGuard.Common.Models
             get { return _minimize; }
             set { this.Set(ref this._minimize, value); }
         }
+
+        private bool _noWindow;
+
+        /// <summary>
+        /// 启动时是否不显示Window
+        /// </summary>
+        public bool NoWindow
+        {
+            get { return _noWindow; }
+            set { this.Set(ref this._noWindow, value); }
+        }
     }
 }

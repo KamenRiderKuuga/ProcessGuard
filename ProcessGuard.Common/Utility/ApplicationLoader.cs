@@ -82,6 +82,7 @@ namespace ProcessGuard.Common.Utility
 
         private const uint MAXIMUM_ALLOWED = 0x2000000;
         private const int CREATE_NEW_CONSOLE = 0x00000010;
+        private const int CREATE_NO_WINDOW = 0x08000000;
         private const int CREATE_UNICODE_ENVIRONMENT = 0x00000400;
         private const int NORMAL_PRIORITY_CLASS = 0x20;
         private const int STARTF_USESHOWWINDOW = 0x00000001;
@@ -127,7 +128,7 @@ namespace ProcessGuard.Common.Utility
         /// <param name="minimize">是否最小化窗体</param>
         /// <param name="commandLine">表示要使用的命令内容，比如需要启动一个cmd程序，因为获取其真实路径比较麻烦，此时可以直接传"cmd"，要启动的应用程序路径留空即可</param>
         /// <returns>创建完成的进程信息</returns>
-        public static bool StartProcessInSession0(string applicationFullPath, string startingDir, out PROCESS_INFORMATION procInfo, bool minimize = false, string commandLine = null)
+        public static bool StartProcessInSession0(string applicationFullPath, string startingDir, out PROCESS_INFORMATION procInfo, bool minimize = false, string commandLine = null, bool noWindow = false)
         {
             IntPtr hUserTokenDup = IntPtr.Zero;
             IntPtr hPToken = IntPtr.Zero;
@@ -158,7 +159,7 @@ namespace ProcessGuard.Common.Utility
                 STARTUPINFO si = new STARTUPINFO();
                 si.cb = (int)Marshal.SizeOf(si);
                 si.lpDesktop = @"winsta0\default";
-              
+
                 if (minimize)
                 {
                     si.dwFlags = STARTF_USESHOWWINDOW;
@@ -166,7 +167,7 @@ namespace ProcessGuard.Common.Utility
                 }
 
                 // 指定进程的优先级和创建方法，这里代表是普通优先级，并且创建方法是带有UI的进程
-                int dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE;
+                int dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | NORMAL_PRIORITY_CLASS | (noWindow ? CREATE_NO_WINDOW : CREATE_NEW_CONSOLE);
 
                 // 创建新进程的环境变量
                 if (!CreateEnvironmentBlock(ref pEnv, hUserTokenDup, false))

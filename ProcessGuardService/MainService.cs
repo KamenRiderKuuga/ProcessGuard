@@ -51,7 +51,8 @@ namespace ProcessGuardService
 
                         if (File.Exists(startFilePath))
                         {
-                            ApplicationLoader.StartProcessInSession0(startFilePath, Path.GetDirectoryName(startFilePath), out var _, config.Minimize, string.IsNullOrEmpty(config.StartupParams) ? null : $" {config.StartupParams}");
+                            ApplicationLoader.StartProcessInSession0(startFilePath, Path.GetDirectoryName(startFilePath), out var _, config.Minimize,
+                                string.IsNullOrEmpty(config.StartupParams) ? null : $" {config.StartupParams}", config.NoWindow);
                             if (config.OnlyOpenOnce)
                             {
                                 configList.Remove(config);

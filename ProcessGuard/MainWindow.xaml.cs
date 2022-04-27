@@ -430,6 +430,7 @@ namespace ProcessGuard
                             ProcessName = _mainWindowViewModel.SeletedProcessName,
                             OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
                             Minimize = _mainWindowViewModel.IsMinimize,
+                            NoWindow = _mainWindowViewModel.NoWindow,
                         });
 
                         await this.HideMetroDialogAsync(dialog);

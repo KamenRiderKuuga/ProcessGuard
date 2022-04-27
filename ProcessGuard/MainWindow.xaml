@@ -48,9 +48,9 @@
                 </Style.Triggers>
             </Style>
             <UserControl x:Key="CustomAddDialog" x:Name="CustomAddDialog">
-                <Grid Margin="0 0 0 40">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
@@ -64,8 +64,8 @@
                         <ColumnDefinition MinWidth="120"></ColumnDefinition>
                         <ColumnDefinition MaxWidth="120"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right">可执行文件完整路径：</TextBlock>
-                    <TextBox Margin="10" Grid.Row="1"
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right">可执行文件完整路径：</TextBlock>
+                    <TextBox Margin="10 0" Grid.Row="0"
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
                              mah:TextBoxHelper.Watermark="填写或者选取文件的完整路径"
@@ -81,8 +81,8 @@
                             </Grid>
                         </mah:TextBoxHelper.ButtonContent>
                     </TextBox>
-                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right">进程名称：</TextBlock>
-                    <TextBox Margin="10" Grid.Row="2" 
+                    <TextBlock Margin="0 16 0 0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right">进程名称：</TextBlock>
+                    <TextBox Margin="10 16 10 0" Grid.Row="1" 
                              Grid.Column="1" 
                              Grid.ColumnSpan="3"
                              Style="{StaticResource MahApps.Styles.TextBox}" 
@@ -91,12 +91,14 @@
                                             ValidatesOnDataErrors=True, 
                                             UpdateSourceTrigger=PropertyChanged, 
                                             NotifyOnValidationError=True}"></TextBox>
-                    <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">仅开机自启：</TextBlock>
-                    <CheckBox Margin="10 10 0 10" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">启动时最小化：</TextBlock>
-                    <CheckBox Margin="10 10 0 10" Grid.Row="4" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">启动参数：</TextBlock>
-                    <TextBox Margin="10" Grid.Row="5"
+                    <TextBlock Margin="0 16 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right">仅开机自启：</TextBlock>
+                    <CheckBox Margin="10 16 0 0" Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">启动时最小化：</TextBlock>
+                    <CheckBox Margin="10 16 0 0" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">无窗应用：</TextBlock>
+                    <CheckBox Margin="10 16 0 0" Grid.Row="4" Grid.Column="1" IsChecked="{Binding NoWindow}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">启动参数：</TextBlock>
+                    <TextBox Margin="10 16 10 0" Grid.Row="5"
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
                              mah:TextBoxHelper.Watermark="可为空"
@@ -164,6 +166,7 @@
                 </DataGridTextColumn>
                 <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" />
                 <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" />
+                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="无窗应用" />
             </DataGrid.Columns>
             <DataGrid.Style>
                 <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}" TargetType="{x:Type DataGrid}">
