@@ -167,6 +167,33 @@
                 <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" />
                 <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" />
                 <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="无窗应用" />
+                <DataGridTemplateColumn MinWidth="30">
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridCell.IsTabStop" Value="True">
+                                    <Setter Property="Background" Value="{x:Null}" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="23"
+                                    Height="23"
+                                    Margin="0 0 2 0"
+                                    Style="{StaticResource AccentCircleButtonStyle}"
+                                    ToolTip="启动程序"
+                                    Click="Button_Click"
+                                    IsEnabled="{Binding CanStart}">
+                                <iconPacks:PackIconModern Width="16"
+                                              Height="16"
+                                              Kind="ControlPlay"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.Style>
                 <Style BasedOn="{StaticResource MahApps.Styles.DataGrid}" TargetType="{x:Type DataGrid}">
