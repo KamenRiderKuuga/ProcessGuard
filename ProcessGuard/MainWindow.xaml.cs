@@ -76,7 +76,10 @@ namespace ProcessGuard
                     MessageDialogResult result = await ShowMessageDialogAsync("注意", "确认删除选中的内容吗？");
 
                     if (result == MessageDialogResult.Affirmative)
+                    {
                         _mainWindowViewModel.ConfigItems.Remove(selectedItem);
+                        ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
+                    }
 
                     break;
 
@@ -88,14 +91,6 @@ namespace ProcessGuard
                         _mainWindowViewModel.SelectedFile = fileInfo.FullName;
                         _mainWindowViewModel.SeletedProcessName = fileInfo.Name.Replace(fileInfo.Extension, string.Empty);
                     }
-                    break;
-
-                case nameof(btnSave):
-                    SaveChanges();
-                    break;
-
-                case nameof(btnUndo):
-                    UndoChanges();
                     break;
 
                 case nameof(btnStart):
@@ -259,36 +254,6 @@ namespace ProcessGuard
         #region 窗体私有函数
 
         /// <summary>
-        /// 撤销本次的所有改动
-        /// </summary>
-        private async void UndoChanges()
-        {
-            MessageDialogResult result = await ShowMessageDialogAsync("注意", "确认撤销本次的所有改动吗？");
-
-            if (result == MessageDialogResult.Affirmative)
-                this._mainWindowViewModel.ConfigItems = ConfigHelper.LoadConfigFile();
-        }
-
-        /// <summary>
-        /// 保存当前配置项
-        /// </summary>
-        private async void SaveChanges()
-        {
-            ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
-
-            MessageDialogResult result = await ShowMessageDialogAsync("注意", "保存配置文件成功，将在重启服务后生效，是否立即重启服务？");
-
-            if (result == MessageDialogResult.Affirmative)
-            {
-                ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
-                StopService();
-                // 停止后立即开始可能会启动失败，这里延迟2秒
-                await Task.Delay(2000);
-                StartService();
-            }
-        }
-
-        /// <summary>
         /// 获取指定Windows系统服务的状态，如果其没有安装，默认返回0
         /// </summary>
         /// <param name="serviceName">服务名</param>
@@ -433,6 +398,7 @@ namespace ProcessGuard
                             NoWindow = _mainWindowViewModel.NoWindow,
                         });
 
+                        ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
                         await this.HideMetroDialogAsync(dialog);
                     }
                     break;
