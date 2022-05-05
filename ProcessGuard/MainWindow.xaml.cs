@@ -390,6 +390,7 @@ namespace ProcessGuard
                     {
                         _mainWindowViewModel.ConfigItems.Add(new ConfigItem()
                         {
+                            ConfigKey = Guid.NewGuid().ToString("N"),
                             EXEFullPath = _mainWindowViewModel.SelectedFile,
                             StartupParams = _mainWindowViewModel.StartupParams,
                             ProcessName = _mainWindowViewModel.SeletedProcessName,
