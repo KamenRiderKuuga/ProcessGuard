@@ -57,9 +57,6 @@
     <Compile Include="Utility\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ValueConverter\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

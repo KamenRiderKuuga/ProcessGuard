@@ -90,5 +90,17 @@ namespace ProcessGuard.Common.Models
             get { return _noWindow; }
             set { this.Set(ref this._noWindow, value); }
         }
+
+        private bool _started;
+
+        /// <summary>
+        /// Indicates the state of the start/stop button in the config row,
+        /// if the value is true and the Service is running, the process will be guarded
+        /// </summary>
+        public bool Started
+        {
+            get { return _started; }
+            set { this.Set(ref this._started, value); }
+        }
     }
 }

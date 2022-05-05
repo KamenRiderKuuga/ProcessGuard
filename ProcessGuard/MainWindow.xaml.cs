@@ -397,6 +397,7 @@ namespace ProcessGuard
                             OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
                             Minimize = _mainWindowViewModel.IsMinimize,
                             NoWindow = _mainWindowViewModel.NoWindow,
+                            Started = false,
                         });
 
                         ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
