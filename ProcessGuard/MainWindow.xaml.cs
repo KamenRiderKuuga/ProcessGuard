@@ -111,6 +111,22 @@ namespace ProcessGuard
         }
 
         /// <summary>
+        /// Click event of datagrid button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridButton_Click(object sender, RoutedEventArgs e)
+        {
+            var currentRow = this.configDataGrid.CurrentItem as ConfigItem;
+
+            if (currentRow != null)
+            {
+                currentRow.Started = !currentRow.Started;
+                ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
+            }
+        }
+
+        /// <summary>
         /// 停止服务
         /// </summary>
         private void StopService()
