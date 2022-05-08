@@ -7,16 +7,10 @@ namespace ProcessGuard.Common.Models
     /// </summary>
     public class ConfigItem : ViewModelBase
     {
-        private string _configKey;
-
         /// <summary>
-        /// The config key, to identify a unique configuration row
+        /// To identify a unique configuration row
         /// </summary>
-        public string ConfigKey
-        {
-            get { return _configKey; }
-            set { this.Set(ref this._configKey, value); }
-        }
+        public string Id { get; set; }
 
         private string _exeFullPath;
 

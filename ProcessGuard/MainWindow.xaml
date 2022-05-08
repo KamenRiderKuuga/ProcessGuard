@@ -16,8 +16,7 @@
         ShowDialogsOverTitleBar="False"         
         ResizeMode="CanResizeWithGrip"
         MinHeight="400"
-        MinWidth="750"
-        Closing="MetroWindow_Closing">
+        MinWidth="750">
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AccentCircleButtonStyle"
@@ -167,7 +166,6 @@
                                     Height="23"
                                     Margin="0 0 2 0"
                                     Style="{StaticResource AccentCircleButtonStyle}"
-                                    ToolTip="启动程序"
                                     Click="DataGridButton_Click">
                                 <iconPacks:PackIconModern>
                                     <iconPacks:PackIconModern.Style>
@@ -177,11 +175,13 @@
                                                     <Setter Property="Width" Value="12" />
                                                     <Setter Property="Height" Value="12" />
                                                     <Setter Property="Kind" Value="ControlStop" />
+                                                    <Setter Property="ToolTip" Value="停止守护并关闭程序" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Path=Started}" Value="False">
                                                     <Setter Property="Width" Value="16" />
                                                     <Setter Property="Height" Value="16" />
                                                     <Setter Property="Kind" Value="ControlPlay" />
+                                                    <Setter Property="ToolTip" Value="开始守护并启动程序" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

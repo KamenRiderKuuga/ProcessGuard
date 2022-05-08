@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO.Pipes;
 
 namespace ProcessGuard
 {
@@ -79,6 +80,8 @@ namespace ProcessGuard
                     {
                         _mainWindowViewModel.ConfigItems.Remove(selectedItem);
                         ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
+                        selectedItem.Started = false;
+                        SendCommandToService(selectedItem);
                     }
 
                     break;
@@ -123,6 +126,7 @@ namespace ProcessGuard
             {
                 currentRow.Started = !currentRow.Started;
                 ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
+                SendCommandToService(currentRow);
             }
         }
 
@@ -236,28 +240,6 @@ namespace ProcessGuard
         }
 
         /// <summary>
-        /// 和CLosing事件配套使用的变量，防止因为异步引起的代码未执行完毕
-        /// </summary>
-        bool _confirmClose = false;
-
-        /// <summary>
-        /// 主窗体关闭时事件
-        /// </summary>
-        private async void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!_confirmClose && ConfigHelper.LoadConfigFile().Serialize() != _mainWindowViewModel.ConfigItems.Serialize())
-            {
-                e.Cancel = true;
-                MessageDialogResult dialogResult = await ShowMessageDialogAsync("注意", "当前配置项有改动，是否放弃所有更改？");
-                if (dialogResult == MessageDialogResult.Affirmative)
-                {
-                    _confirmClose = true;
-                    this.Close();
-                }
-            }
-        }
-
-        /// <summary>
         /// 用于检查服务状态的计时器
         /// </summary>
         private void CheckTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -279,7 +261,7 @@ namespace ProcessGuard
             ServiceController service = null;
             try
             {
-                service = new ServiceController(Constants.PROCESS_GUARD_SERVICE);
+                service = new ServiceController(serviceName);
                 return service.Status;
             }
             catch (Exception)
@@ -381,6 +363,31 @@ namespace ProcessGuard
         }
 
         /// <summary>
+        /// Send command to service to control the process
+        /// </summary>
+        /// <param name="config"></param>
+        private void SendCommandToService(ConfigItem config)
+        {
+            if (_mainWindowViewModel.IsRun != true)
+            {
+                return;
+            }
+            using (var client = new NamedPipeClientStream(".", Constants.PROCESS_GUARD_SERVICE, PipeDirection.Out))
+            using (var writer = new StreamWriter(client))
+            {
+                try
+                {
+                    client.Connect(1000);
+                    writer.WriteLine(config.Serialize());
+                }
+                catch (Exception)
+                {
+                    // do nothing
+                }
+            }
+        }
+
+        /// <summary>
         /// 关闭当前弹出的Dialog窗口
         /// </summary>
         private async void CloseCustomDialog(object sender, RoutedEventArgs e)
@@ -406,7 +413,7 @@ namespace ProcessGuard
                     {
                         _mainWindowViewModel.ConfigItems.Add(new ConfigItem()
                         {
-                            ConfigKey = Guid.NewGuid().ToString("N"),
+                            Id = Guid.NewGuid().ToString("N"),
                             EXEFullPath = _mainWindowViewModel.SelectedFile,
                             StartupParams = _mainWindowViewModel.StartupParams,
                             ProcessName = _mainWindowViewModel.SeletedProcessName,
