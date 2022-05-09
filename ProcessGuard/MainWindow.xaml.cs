@@ -458,6 +458,11 @@ namespace ProcessGuard
                             config.Minimize = _mainWindowViewModel.IsMinimize;
                             config.NoWindow = _mainWindowViewModel.NoWindow;
                             config.Started = _mainWindowViewModel.Started;
+
+                            if (config.Started)
+                            {
+                                SendCommandToService(config);
+                            }
                         }
                         else
                         {
