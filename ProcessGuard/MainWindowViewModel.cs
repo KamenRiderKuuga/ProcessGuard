@@ -19,6 +19,11 @@ namespace ProcessGuard
             set { this.Set(ref this._configItems, value); }
         }
 
+        /// <summary>
+        /// Id of selected item
+        /// </summary>
+        public string SelectedId { get; set; }
+
         private string _selectedFile;
 
         /// <summary>
@@ -106,6 +111,24 @@ namespace ProcessGuard
             get { return _noWindow; }
             set { this.Set(ref this._noWindow, value); }
         }
+
+        /// <summary>
+        /// Indicates the state of the start/stop button in the config row,
+        /// if the value is true and the Service is running, the process will be guarded
+        /// </summary>
+        public bool Started { get; set; }
+
+        private bool _isNew;
+
+        /// <summary>
+        /// Identifies whether the current config is new
+        /// </summary>
+        public bool IsNew
+        {
+            get { return _isNew; }
+            set { this.Set(ref this._isNew, value); }
+        }
+
 
         private bool _canStart;
 

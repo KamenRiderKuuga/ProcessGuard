@@ -12,6 +12,8 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.IO.Pipes;
+using System.Linq;
+using System.Windows.Data;
 
 namespace ProcessGuard
 {
@@ -56,6 +58,8 @@ namespace ProcessGuard
             {
                 case nameof(btnAdd):
                     var dialog = new CustomDialog(this.MetroDialogOptions) { Content = this.Resources["CustomAddDialog"], Title = string.Empty };
+                    _mainWindowViewModel.SelectedId = Guid.NewGuid().ToString("N");
+                    _mainWindowViewModel.Started = false;
 
                     await this.ShowMetroDialogAsync(dialog);
                     await dialog.WaitUntilUnloadedAsync();
@@ -93,6 +97,7 @@ namespace ProcessGuard
                         FileInfo fileInfo = new FileInfo(filePath);
                         _mainWindowViewModel.SelectedFile = fileInfo.FullName;
                         _mainWindowViewModel.SeletedProcessName = fileInfo.Name.Replace(fileInfo.Extension, string.Empty);
+                        _mainWindowViewModel.IsNew = true;
                     }
                     break;
 
@@ -127,6 +132,34 @@ namespace ProcessGuard
                 currentRow.Started = !currentRow.Started;
                 ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
                 SendCommandToService(currentRow);
+            }
+        }
+
+        /// <summary>
+        /// Double click event of datagrid cell
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void DataGridCell_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var currentRow = this.configDataGrid.CurrentItem as ConfigItem;
+
+            if (currentRow != null)
+            {
+                var dialog = new CustomDialog(this.MetroDialogOptions) { Content = this.Resources["CustomAddDialog"], Title = string.Empty };
+
+                _mainWindowViewModel.SelectedId = currentRow.Id;
+                _mainWindowViewModel.SelectedFile = currentRow.EXEFullPath;
+                _mainWindowViewModel.StartupParams = currentRow.StartupParams;
+                _mainWindowViewModel.SeletedProcessName = currentRow.ProcessName;
+                _mainWindowViewModel.IsOnlyOpenOnce = currentRow.OnlyOpenOnce;
+                _mainWindowViewModel.IsMinimize = currentRow.Minimize;
+                _mainWindowViewModel.NoWindow = currentRow.NoWindow;
+                _mainWindowViewModel.Started = currentRow.Started;
+                _mainWindowViewModel.IsNew = false;
+
+                await this.ShowMetroDialogAsync(dialog);
+                await dialog.WaitUntilUnloadedAsync();
             }
         }
 
@@ -413,17 +446,33 @@ namespace ProcessGuard
                     if (_mainWindowViewModel[nameof(_mainWindowViewModel.SelectedFile)] == null &&
                         _mainWindowViewModel[nameof(_mainWindowViewModel.SeletedProcessName)] == null)
                     {
-                        _mainWindowViewModel.ConfigItems.Add(new ConfigItem()
+                        var config = _mainWindowViewModel.ConfigItems.Where(c => c.Id == _mainWindowViewModel.SelectedId).FirstOrDefault();
+
+                        if (config != null)
                         {
-                            Id = Guid.NewGuid().ToString("N"),
-                            EXEFullPath = _mainWindowViewModel.SelectedFile,
-                            StartupParams = _mainWindowViewModel.StartupParams,
-                            ProcessName = _mainWindowViewModel.SeletedProcessName,
-                            OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
-                            Minimize = _mainWindowViewModel.IsMinimize,
-                            NoWindow = _mainWindowViewModel.NoWindow,
-                            Started = false,
-                        });
+                            config.Id = _mainWindowViewModel.SelectedId;
+                            config.EXEFullPath = _mainWindowViewModel.SelectedFile;
+                            config.StartupParams = _mainWindowViewModel.StartupParams;
+                            config.ProcessName = _mainWindowViewModel.SeletedProcessName;
+                            config.OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce;
+                            config.Minimize = _mainWindowViewModel.IsMinimize;
+                            config.NoWindow = _mainWindowViewModel.NoWindow;
+                            config.Started = _mainWindowViewModel.Started;
+                        }
+                        else
+                        {
+                            _mainWindowViewModel.ConfigItems.Add(new ConfigItem()
+                            {
+                                Id = _mainWindowViewModel.SelectedId,
+                                EXEFullPath = _mainWindowViewModel.SelectedFile,
+                                StartupParams = _mainWindowViewModel.StartupParams,
+                                ProcessName = _mainWindowViewModel.SeletedProcessName,
+                                OnlyOpenOnce = _mainWindowViewModel.IsOnlyOpenOnce,
+                                Minimize = _mainWindowViewModel.IsMinimize,
+                                NoWindow = _mainWindowViewModel.NoWindow,
+                                Started = _mainWindowViewModel.Started,
+                            });
+                        }
 
                         ConfigHelper.SaveConfigs(_mainWindowViewModel.ConfigItems);
                         await this.HideMetroDialogAsync(dialog);

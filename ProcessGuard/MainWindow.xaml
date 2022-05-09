@@ -93,8 +93,20 @@
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center"
-                            Content="确认添加" Style="{DynamicResource MahApps.Styles.Button.Square}"
-                            Click="CloseCustomDialog"></Button>
+                            Click="CloseCustomDialog">
+                        <Button.Style>
+                            <Style TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MahApps.Styles.Button.Square}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsNew}" Value="True">
+                                        <Setter Property="Content" Value="确认添加" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsNew}" Value="False">
+                                        <Setter Property="Content" Value="确认修改" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                     <Button x:Name="btnCancelAdd" 
                             Margin="10"
                             Grid.Row="6"
@@ -124,31 +136,36 @@
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=ConfigItems}"
                   RowHeaderWidth="0">
+            <DataGrid.Resources>
+                <Style x:Key="DoubleClickableCell" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridCell_MouseDoubleClick"/>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding ProcessName}" Header="进程名称">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding ProcessName}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}" Header="完整路径">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding StartupParams}" Width="0.5*" Header="启动参数">
                     <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding StartupParams}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" />
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" />
-                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="无窗应用" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="无窗应用" CellStyle="{StaticResource DoubleClickableCell}" />
                 <DataGridTemplateColumn MinWidth="30">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
