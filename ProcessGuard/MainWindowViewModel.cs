@@ -203,11 +203,6 @@ namespace ProcessGuard
                             return "文件路径不正确，请检查！";
                         }
 
-                        if (ConfigItems.Select(item => item.EXEFullPath).Contains(SelectedFile))
-                        {
-                            return "该配置项已存在，请删除后重新添加";
-                        }
-
                         break;
 
                     case nameof(SeletedProcessName):
