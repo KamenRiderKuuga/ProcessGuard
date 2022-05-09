@@ -373,12 +373,14 @@ namespace ProcessGuard
                 return;
             }
             using (var client = new NamedPipeClientStream(".", Constants.PROCESS_GUARD_SERVICE, PipeDirection.Out))
-            using (var writer = new StreamWriter(client))
             {
                 try
                 {
                     client.Connect(1000);
-                    writer.WriteLine(config.Serialize());
+                    using (var writer = new StreamWriter(client))
+                    {
+                        writer.WriteLine(config.Serialize());
+                    }
                 }
                 catch (Exception)
                 {
