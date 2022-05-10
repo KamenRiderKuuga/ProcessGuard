@@ -88,7 +88,7 @@ namespace ProcessGuard
         /// </summary>
         public string RunStatus
         {
-            get { return $"服务状态({_runStatus})"; }
+            get { return _runStatus; }
             set { this.Set(ref this._runStatus, value); }
         }
 

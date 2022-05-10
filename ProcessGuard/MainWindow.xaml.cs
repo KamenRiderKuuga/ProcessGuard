@@ -33,7 +33,6 @@ namespace ProcessGuard
         {
             InitializeComponent();
             _mainWindowViewModel = new MainWindowViewModel() { ConfigItems = new ObservableCollection<ConfigItem>(), StatusColor = "Transparent" };
-            UpdateServiceStatus();
             DataContext = _mainWindowViewModel;
             this.MetroDialogOptions.AnimateShow = true;
             this.MetroDialogOptions.AnimateHide = false;
@@ -54,6 +53,7 @@ namespace ProcessGuard
             }
 
             SetLanguageDictionary();
+            UpdateServiceStatus();
 
             _checkTimer = new Timer();
             _checkTimer.Elapsed += CheckTimer_Elapsed;
@@ -95,7 +95,7 @@ namespace ProcessGuard
                         break;
                     }
 
-                    MessageDialogResult result = await ShowMessageDialogAsync("注意", "确认删除选中的内容吗？");
+                    MessageDialogResult result = await ShowMessageDialogAsync(FindResource("Warning").ToString(), FindResource("ConfirmDelete").ToString());
 
                     if (result == MessageDialogResult.Affirmative)
                     {
@@ -225,7 +225,7 @@ namespace ProcessGuard
         {
             var error = string.Empty;
 
-            MessageDialogResult dialogResult = await ShowMessageDialogAsync("注意", "确认卸载守护服务吗？");
+            MessageDialogResult dialogResult = await ShowMessageDialogAsync(FindResource("Warning").ToString(), FindResource("ConfirmUninstall").ToString());
 
             if (dialogResult == MessageDialogResult.Affirmative)
             {
@@ -353,42 +353,42 @@ namespace ProcessGuard
             {
                 case ServiceControllerStatus.ContinuePending:
                     statusColor = "Yellow";
-                    runStatus = "即将继续";
+                    runStatus = FindResource("ContinuePending").ToString();
                     isRun = false;
                     break;
                 case ServiceControllerStatus.Paused:
                     statusColor = "Orange";
-                    runStatus = "已暂停";
+                    runStatus = FindResource("Paused").ToString();
                     isRun = false;
                     break;
                 case ServiceControllerStatus.PausePending:
                     statusColor = "Yellow";
-                    runStatus = "即将暂停";
+                    runStatus = FindResource("PausePending").ToString();
                     isRun = true;
                     break;
                 case ServiceControllerStatus.Running:
                     statusColor = "Green";
-                    runStatus = "运行中";
+                    runStatus = FindResource("Running").ToString();
                     isRun = true;
                     break;
                 case ServiceControllerStatus.StartPending:
                     statusColor = "Yellow";
-                    runStatus = "正在启动";
+                    runStatus = FindResource("StartPending").ToString();
                     isRun = false;
                     break;
                 case ServiceControllerStatus.Stopped:
                     statusColor = "Orange";
-                    runStatus = "已停止";
+                    runStatus = FindResource("Stopped").ToString();
                     isRun = false;
                     break;
                 case ServiceControllerStatus.StopPending:
                     statusColor = "Yellow";
-                    runStatus = "正在停止";
+                    runStatus = FindResource("StopPending").ToString();
                     isRun = true;
                     break;
                 default:
                     statusColor = "Red";
-                    runStatus = "未安装";
+                    runStatus = FindResource("NotInstalled").ToString();
                     isRun = null;
                     break;
             }
@@ -398,7 +398,7 @@ namespace ProcessGuard
                 this.Dispatcher.Invoke(() =>
                 {
                     _mainWindowViewModel.StatusColor = statusColor;
-                    _mainWindowViewModel.RunStatus = runStatus;
+                    _mainWindowViewModel.RunStatus = string.Format(FindResource("ServiceStatus").ToString(), runStatus);
                     _mainWindowViewModel.IsRun = isRun;
                 });
             }
@@ -414,8 +414,8 @@ namespace ProcessGuard
         {
             var mySettings = new MetroDialogSettings()
             {
-                AffirmativeButtonText = "是的",
-                NegativeButtonText = "取消",
+                AffirmativeButtonText = FindResource("Yes").ToString(),
+                NegativeButtonText = FindResource("Cancel").ToString(),
                 ColorScheme = MetroDialogOptions.ColorScheme,
                 DialogButtonFontSize = 20D,
                 AnimateShow = false,

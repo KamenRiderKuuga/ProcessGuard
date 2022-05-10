@@ -7,10 +7,10 @@
     <system:String x:Key="InputOrSelectTheFullPath">填写或者选取完整路径</system:String>
     <system:String x:Key="SelectUsingFileExplorer">使用文件资源管理器进行选取</system:String>
     <system:String x:Key="ProcessName">进程名称</system:String>
-    <system:String x:Key="StartOnlyOnce">仅启动一次</system:String>
-    <system:String x:Key="MinimizeStartup">启动时最小化</system:String>
+    <system:String x:Key="StartOnce">仅启动一次</system:String>
+    <system:String x:Key="Minimize">最小化</system:String>
     <system:String x:Key="NoWindow">无窗应用</system:String>
-    <system:String x:Key="StartupParameters">启动参数</system:String>
+    <system:String x:Key="Parameters">启动参数</system:String>
     <system:String x:Key="CanBeLeftBlank">可为空</system:String>
     <system:String x:Key="ConfirmAdd">确认添加</system:String>
     <system:String x:Key="ConfirmChanges">确认修改</system:String>
@@ -18,5 +18,25 @@
     <system:String x:Key="Language">语言</system:String>
     <system:String x:Key="OK">好了</system:String>
     <system:String x:Key="FullPath">完整路径</system:String>
+    <system:String x:Key="StopGuard">停止守护并关闭进程</system:String>
+    <system:String x:Key="StartGuard">启动进程并开始守护</system:String>
+    <system:String x:Key="StartService">启动守护服务</system:String>
+    <system:String x:Key="StopService">停止守护服务</system:String>
+    <system:String x:Key="UninstallService">卸载守护服务</system:String>
+    <system:String x:Key="AddConfig">添加一条配置项</system:String>
+    <system:String x:Key="DeleteConfig">删除选中的配置项</system:String>
+    <system:String x:Key="Warning">注意</system:String>
+    <system:String x:Key="ConfirmDelete">确认删除选中的配置项吗？</system:String>
+    <system:String x:Key="ConfirmUninstall">确认卸载服务吗？</system:String>
+    <system:String x:Key="ContinuePending">即将继续</system:String>
+    <system:String x:Key="Paused">已暂停</system:String>
+    <system:String x:Key="PausePending">即将暂停</system:String>
+    <system:String x:Key="Running">运行中</system:String>
+    <system:String x:Key="StartPending">正在启动</system:String>
+    <system:String x:Key="Stopped">已停止</system:String>
+    <system:String x:Key="StopPending">正在停止</system:String>
+    <system:String x:Key="NotInstalled">未安装</system:String>
+    <system:String x:Key="ServiceStatus">服务状态({0})</system:String>
+    <system:String x:Key="Yes">是的</system:String>
 
 </ResourceDictionary>

@@ -85,13 +85,13 @@
                                             ValidatesOnDataErrors=True, 
                                             UpdateSourceTrigger=PropertyChanged, 
                                             NotifyOnValidationError=True}"></TextBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource StartOnlyOnce}" />
+                    <TextBlock Margin="0 16 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource StartOnce}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource MinimizeStartup}" />
+                    <TextBlock Margin="0 16 0 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource Minimize}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
                     <TextBlock Margin="0 16 0 0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource NoWindow}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="4" Grid.Column="1" IsChecked="{Binding NoWindow}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource StartupParameters}" />
+                    <TextBlock Margin="0 16 0 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource Parameters}" />
                     <TextBox Margin="10 16 10 0" Grid.Row="5"
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
@@ -187,30 +187,81 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding ProcessName}" Header="{DynamicResource ProcessName}">
+                <DataGridTextColumn Width="*" Binding="{Binding ProcessName}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="{DynamicResource ProcessName}" />
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding ProcessName}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}" Header="{DynamicResource FullPath}">
+                <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="{DynamicResource FullPath}" />
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StartupParams}" Width="0.5*" Header="{DynamicResource StartupParameters}">
+                <DataGridTextColumn Binding="{Binding StartupParams}" Width="*">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="{DynamicResource Parameters}" />
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding StartupParams}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="{DynamicResource StartOnlyOnce}" CellStyle="{StaticResource DoubleClickableCell}" />
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="{DynamicResource MinimizeStartup}" CellStyle="{StaticResource DoubleClickableCell}" />
-                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="{DynamicResource NoWindow}" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" CellStyle="{StaticResource DoubleClickableCell}">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="{DynamicResource StartOnce}" />
+                    </DataGridCheckBoxColumn.Header>
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" CellStyle="{StaticResource DoubleClickableCell}">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="{DynamicResource Minimize}" />
+                    </DataGridCheckBoxColumn.Header>
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding NoWindow}" CellStyle="{StaticResource DoubleClickableCell}">
+                    <DataGridCheckBoxColumn.Header>
+                        <TextBlock Text="{DynamicResource NoWindow}" />
+                    </DataGridCheckBoxColumn.Header>
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                </DataGridCheckBoxColumn>
                 <DataGridTemplateColumn MinWidth="30">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
@@ -237,13 +288,13 @@
                                                     <Setter Property="Width" Value="12" />
                                                     <Setter Property="Height" Value="12" />
                                                     <Setter Property="Kind" Value="ControlStop" />
-                                                    <Setter Property="ToolTip" Value="停止守护并关闭程序" />
+                                                    <Setter Property="ToolTip" Value="{DynamicResource StopGuard}" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Path=Started}" Value="False">
                                                     <Setter Property="Width" Value="16" />
                                                     <Setter Property="Height" Value="16" />
                                                     <Setter Property="Kind" Value="ControlPlay" />
-                                                    <Setter Property="ToolTip" Value="开始守护并启动程序" />
+                                                    <Setter Property="ToolTip" Value="{DynamicResource StartGuard}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -265,7 +316,7 @@
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="300" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="30" />
@@ -308,7 +359,7 @@
                         Height="23"
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
-                        ToolTip="启动守护服务"
+                        ToolTip="{DynamicResource StartService}"
                         Click="Button_Click"
                         IsEnabled="{Binding CanStart}">
                     <iconPacks:PackIconModern Width="16"
@@ -321,7 +372,7 @@
                         Height="23"
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
-                        ToolTip="停止守护服务"
+                        ToolTip="{DynamicResource StopService}"
                         Click="Button_Click"
                         IsEnabled="{Binding CanStop}">
                     <iconPacks:PackIconModern Width="12"
@@ -334,7 +385,7 @@
                         Height="23"
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
-                        ToolTip="卸载守护服务"
+                        ToolTip="{DynamicResource UninstallService}"
                         Click="Button_Click"
                         IsEnabled="{Binding CanUnistall}">
                     <iconPacks:PackIconModern Width="16"
@@ -347,7 +398,7 @@
                         Height="23"
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
-                        ToolTip="添加一条配置项"
+                        ToolTip="{DynamicResource AddConfig}"
                         Click="Button_Click">
                     <iconPacks:PackIconModern Width="18"
                                               Height="18"
@@ -359,7 +410,7 @@
                         Height="23"
                         Margin="0"
                         Style="{StaticResource AccentCircleButtonStyle}"
-                        ToolTip="删除选中的配置项"
+                        ToolTip="{DynamicResource DeleteConfig}"
                         Click="Button_Click">
                     <iconPacks:PackIconModern Width="18"
                                               Height="18"

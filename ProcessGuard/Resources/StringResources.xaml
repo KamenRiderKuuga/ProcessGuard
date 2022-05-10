@@ -7,10 +7,10 @@
     <system:String x:Key="InputOrSelectTheFullPath">Input or select the full path</system:String>
     <system:String x:Key="SelectUsingFileExplorer">Select using file explorer</system:String>
     <system:String x:Key="ProcessName">Process Name</system:String>
-    <system:String x:Key="StartOnlyOnce">Start Only Once</system:String>
-    <system:String x:Key="MinimizeStartup">Minimize at Startup</system:String>
+    <system:String x:Key="StartOnce">Start Once</system:String>
+    <system:String x:Key="Minimize">Minimize</system:String>
     <system:String x:Key="NoWindow">No Window</system:String>
-    <system:String x:Key="StartupParameters">Startup Parameters</system:String>
+    <system:String x:Key="Parameters">Parameters</system:String>
     <system:String x:Key="CanBeLeftBlank">Can be left blank</system:String>
     <system:String x:Key="ConfirmAdd">Confirm Add</system:String>
     <system:String x:Key="ConfirmChanges">Confirm</system:String>
@@ -18,5 +18,25 @@
     <system:String x:Key="Language">Language</system:String>
     <system:String x:Key="OK">OK</system:String>
     <system:String x:Key="FullPath">Full Path</system:String>
+    <system:String x:Key="StopGuard">Stop the guard and close the process</system:String>
+    <system:String x:Key="StartGuard">Open the process and start the guard</system:String>
+    <system:String x:Key="StartService">Start the guard service</system:String>
+    <system:String x:Key="StopService">Stop the guard service</system:String>
+    <system:String x:Key="UninstallService">Uninstall the guard service</system:String>
+    <system:String x:Key="AddConfig">Add a configuration item</system:String>
+    <system:String x:Key="DeleteConfig">Delete the selected configuration item</system:String>
+    <system:String x:Key="Warning">Warning</system:String>
+    <system:String x:Key="ConfirmDelete">Do you want to delete the selected item?</system:String>
+    <system:String x:Key="ConfirmUninstall">Do you want to uninstall the service?</system:String>
+    <system:String x:Key="ContinuePending">Continue Pending</system:String>
+    <system:String x:Key="Paused">Paused</system:String>
+    <system:String x:Key="PausePending">Pause Pending</system:String>
+    <system:String x:Key="Running">Continue Pending</system:String>
+    <system:String x:Key="StartPending">Start Pending</system:String>
+    <system:String x:Key="Stopped">Stopped</system:String>
+    <system:String x:Key="StopPending">Stop Pending</system:String>
+    <system:String x:Key="NotInstalled">Not Installed</system:String>
+    <system:String x:Key="ServiceStatus">Service Status({0})</system:String>
+    <system:String x:Key="Yes">Yes</system:String>
 
 </ResourceDictionary>
