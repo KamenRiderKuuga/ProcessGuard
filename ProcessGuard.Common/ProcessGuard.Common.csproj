@@ -51,6 +51,7 @@
     <Compile Include="Core\ViewModelBase.cs" />
     <Compile Include="Models\ConfigItem.cs" />
     <Compile Include="Models\ConfigItemWithProcessId.cs" />
+    <Compile Include="Models\GlobalConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ApplicationLoader.cs" />
     <Compile Include="Utility\ConfigHelper.cs" />

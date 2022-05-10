@@ -17,6 +17,18 @@
         ResizeMode="CanResizeWithGrip"
         MinHeight="400"
         MinWidth="750">
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <StackPanel Orientation="Horizontal" Margin="3">
+                <Button x:Name="btnSetting" ToolTip="程序配置" Click="Button_Click">
+                    <iconPacks:PackIconModern Width="22"
+                                  Height="22"
+                                  Kind="Cog"
+                                  Margin="5 0 0 0"/>
+                </Button>
+            </StackPanel>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
     <Window.Resources>
         <ResourceDictionary>
             <Style x:Key="AccentCircleButtonStyle"
@@ -115,6 +127,36 @@
                             Width="80" 
                             VerticalAlignment="Center" 
                             Content="取消"  
+                            Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
+                            Click="CloseCustomDialog"></Button>
+                </Grid>
+            </UserControl>
+            <UserControl x:Key="CustomSettingDialog" x:Name="CustomSettingDialog">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"></ColumnDefinition>
+                        <ColumnDefinition MaxWidth="30"></ColumnDefinition>
+                        <ColumnDefinition MinWidth="120"></ColumnDefinition>
+                        <ColumnDefinition MaxWidth="120"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right">语言：</TextBlock>
+                    <ComboBox Margin="10 0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center"
+                              ItemsSource="{Binding Languages}"
+                              SelectedValue="{Binding Path=GlobalConfig.Language}"
+                              SelectionChanged="LanguageComboBox_SelectionChanged">
+                    </ComboBox>
+                    <Button x:Name="btnOK" 
+                            Margin="10"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            HorizontalAlignment="Right" 
+                            Width="80" 
+                            VerticalAlignment="Center" 
+                            Content="好了"  
                             Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
                             Click="CloseCustomDialog"></Button>
                 </Grid>

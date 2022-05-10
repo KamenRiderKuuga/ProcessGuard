@@ -1,5 +1,4 @@
 ﻿using ProcessGuard.Common.Models;
-using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.IO;
 using System;
@@ -18,7 +17,23 @@ namespace ProcessGuard.Common.Utility
         {
             var configFilePath = GetAppDataFilePath(Constants.CONFIG_FILE_NAME);
 
-            ObservableCollection<ConfigItem> result = null;
+            if (!File.Exists(configFilePath))
+            {
+                File.WriteAllText(configFilePath, "");
+            }
+
+            var json = File.ReadAllText(configFilePath);
+            var result = json.DeserializeObject<ObservableCollection<ConfigItem>>();
+
+            return result ?? new ObservableCollection<ConfigItem>();
+        }
+
+        /// <summary>
+        /// Initialize the global config from the configuration file
+        /// </summary>
+        public static GlobalConfig LoadGlobalConfigFile()
+        {
+            var configFilePath = GetAppDataFilePath(Constants.GLOBAL_CONFIG_FILE_NAME);
 
             if (!File.Exists(configFilePath))
             {
@@ -26,11 +41,10 @@ namespace ProcessGuard.Common.Utility
             }
 
             var json = File.ReadAllText(configFilePath);
-            result = json.DeserializeObject<ObservableCollection<ConfigItem>>();
+            var result = json.DeserializeObject<GlobalConfig>();
 
-            return result ?? new ObservableCollection<ConfigItem>();
+            return result ?? new GlobalConfig();
         }
-
 
         /// <summary>
         /// 保存配置项
@@ -43,6 +57,16 @@ namespace ProcessGuard.Common.Utility
         }
 
         /// <summary>
+        /// Save global configurations
+        /// </summary>
+        /// <param name="config">The global config instance</param>
+        public static void SaveGlobalConfigs(GlobalConfig config)
+        {
+            var configFilePath = GetAppDataFilePath(Constants.GLOBAL_CONFIG_FILE_NAME);
+            File.WriteAllText(configFilePath, config.Serialize());
+        }
+
+        /// <summary>
         /// 获取在AppData目录的文件位置
         /// </summary>
         /// <param name="fileName">文件名</param>
@@ -50,7 +74,7 @@ namespace ProcessGuard.Common.Utility
         public static string GetAppDataFilePath(string fileName)
         {
             var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), Constants.PROCESS_GUARD_SERVICE);
-            
+
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);

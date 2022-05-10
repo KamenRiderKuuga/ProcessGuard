@@ -3,7 +3,6 @@ using ProcessGuard.Common.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 
 namespace ProcessGuard
 {
@@ -17,6 +16,31 @@ namespace ProcessGuard
         {
             get { return _configItems; }
             set { this.Set(ref this._configItems, value); }
+        }
+
+        private readonly ReadOnlyObservableCollection<string> _languages = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>
+        {
+            "English",
+            "简体中文",
+        });
+
+        /// <summary>
+        /// Languages in ComboBox for selection
+        /// </summary>
+        public ReadOnlyObservableCollection<string> Languages
+        {
+            get { return _languages; }
+        }
+
+        private GlobalConfig _globalConfig;
+
+        /// <summary>
+        /// Global configurations of application
+        /// </summary>
+        public GlobalConfig GlobalConfig
+        {
+            get { return _globalConfig; }
+            set { this.Set(ref this._globalConfig, value); }
         }
 
         /// <summary>
@@ -128,7 +152,6 @@ namespace ProcessGuard
             get { return _isNew; }
             set { this.Set(ref this._isNew, value); }
         }
-
 
         private bool _canStart;
 

@@ -13,7 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.IO.Pipes;
 using System.Linq;
-using System.Windows.Data;
+using System.Globalization;
 
 namespace ProcessGuard
 {
@@ -39,6 +39,20 @@ namespace ProcessGuard
             this.MetroDialogOptions.AnimateHide = false;
             _mainWindowViewModel.ConfigItems = ConfigHelper.LoadConfigFile();
             _mainWindowViewModel.IsRun = _mainWindowViewModel.IsRun == true ? false : true;
+            _mainWindowViewModel.GlobalConfig = ConfigHelper.LoadGlobalConfigFile();
+
+            if (string.IsNullOrEmpty(_mainWindowViewModel.GlobalConfig.Language))
+            {
+                if (CultureInfo.CurrentUICulture.Name == "zh-CN")
+                {
+                    _mainWindowViewModel.GlobalConfig.Language = "简体中文";
+                }
+                else
+                {
+                    _mainWindowViewModel.GlobalConfig.Language = "English";
+                }
+            }
+
             _checkTimer = new Timer();
             _checkTimer.Elapsed += CheckTimer_Elapsed;
             _checkTimer.Start();
@@ -113,6 +127,12 @@ namespace ProcessGuard
                     await UninstallService();
                     break;
 
+                case nameof(btnSetting):
+                    var settingDialog = new CustomDialog(this.MetroDialogOptions) { Content = this.Resources["CustomSettingDialog"], Title = string.Empty };
+                    await this.ShowMetroDialogAsync(settingDialog, new MetroDialogSettings { });
+                    await settingDialog.WaitUntilUnloadedAsync();
+                    break;
+
                 default:
                     break;
             }
@@ -161,6 +181,16 @@ namespace ProcessGuard
                 await this.ShowMetroDialogAsync(dialog);
                 await dialog.WaitUntilUnloadedAsync();
             }
+        }
+
+        /// <summary>
+        /// Event after language comboBox selection changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ConfigHelper.SaveGlobalConfigs(_mainWindowViewModel.GlobalConfig);
         }
 
         /// <summary>
@@ -430,16 +460,6 @@ namespace ProcessGuard
             var button = sender as Button;
             var dialog = button.TryFindParent<BaseMetroDialog>();
 
-            var mySettings = new MetroDialogSettings()
-            {
-                AffirmativeButtonText = "是的",
-                NegativeButtonText = "取消",
-                ColorScheme = MetroDialogOptions.ColorScheme,
-                DialogButtonFontSize = 20D,
-                AnimateShow = false,
-                AnimateHide = false,
-            };
-
             switch (button.Name)
             {
                 case "btnConfirmAdd":
@@ -485,6 +505,7 @@ namespace ProcessGuard
                     break;
 
                 case "btnCancelAdd":
+                case "btnOK":
                     await this.HideMetroDialogAsync(dialog);
                     break;
                 default:

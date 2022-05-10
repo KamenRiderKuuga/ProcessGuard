@@ -8,6 +8,11 @@
         public const string CONFIG_FILE_NAME = "GuardianConfig.json";
 
         /// <summary>
+        /// The global configurations file name
+        /// </summary>
+        public const string GLOBAL_CONFIG_FILE_NAME = "GlobalConfig.json";
+
+        /// <summary>
         /// 服务进程名
         /// </summary>
         public const string PROCESS_GUARD_SERVICE = "ProcessGuardService";
