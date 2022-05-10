@@ -22,12 +22,12 @@ namespace ProcessGuard
     /// </summary>
     public partial class MainWindow
     {
-        private MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         /// <summary>
         /// 用于定时检查服务状态的Timer
         /// </summary>
-        private Timer _checkTimer;
+        private readonly Timer _checkTimer;
 
         public MainWindow()
         {
@@ -53,6 +53,8 @@ namespace ProcessGuard
                 }
             }
 
+            SetLanguageDictionary();
+
             _checkTimer = new Timer();
             _checkTimer.Elapsed += CheckTimer_Elapsed;
             _checkTimer.Start();
@@ -74,6 +76,7 @@ namespace ProcessGuard
                     var dialog = new CustomDialog(this.MetroDialogOptions) { Content = this.Resources["CustomAddDialog"], Title = string.Empty };
                     _mainWindowViewModel.SelectedId = Guid.NewGuid().ToString("N");
                     _mainWindowViewModel.Started = false;
+                    _mainWindowViewModel.IsNew = true;
 
                     await this.ShowMetroDialogAsync(dialog);
                     await dialog.WaitUntilUnloadedAsync();
@@ -111,7 +114,6 @@ namespace ProcessGuard
                         FileInfo fileInfo = new FileInfo(filePath);
                         _mainWindowViewModel.SelectedFile = fileInfo.FullName;
                         _mainWindowViewModel.SeletedProcessName = fileInfo.Name.Replace(fileInfo.Extension, string.Empty);
-                        _mainWindowViewModel.IsNew = true;
                     }
                     break;
 
@@ -191,6 +193,7 @@ namespace ProcessGuard
         private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ConfigHelper.SaveGlobalConfigs(_mainWindowViewModel.GlobalConfig);
+            SetLanguageDictionary();
         }
 
         /// <summary>
@@ -510,6 +513,33 @@ namespace ProcessGuard
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void SetLanguageDictionary()
+        {
+            ResourceDictionary dict = new ResourceDictionary();
+            var uriString = string.Empty;
+
+            switch (_mainWindowViewModel.GlobalConfig?.Language)
+            {
+                case "简体中文":
+                    uriString = "..\\Resources\\StringResources.zh-CN.xaml";
+                    break;
+                default:
+                    uriString = "..\\Resources\\StringResources.xaml";
+                    break;
+            }
+
+            dict.Source = new Uri(uriString, UriKind.Relative);
+
+            var existedDict = Resources.MergedDictionaries.Where(d => d.Source.OriginalString == uriString).FirstOrDefault();
+
+            Resources.MergedDictionaries.Add(dict);
+
+            if (existedDict != null)
+            {
+                Resources.MergedDictionaries.Remove(existedDict);
             }
         }
 

@@ -8,7 +8,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
-        Title="进程守护服务配置" TitleAlignment="Center" Height="300" Width="600"
+        Title="{DynamicResource ServiceConfig}" TitleAlignment="Center" Height="300" Width="600"
         WindowStartupLocation="CenterScreen"
         Icon="cola.ico"
         ShowIconOnTitleBar="True"
@@ -20,7 +20,7 @@
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <StackPanel Orientation="Horizontal" Margin="3">
-                <Button x:Name="btnSetting" ToolTip="程序配置" Click="Button_Click">
+                <Button x:Name="btnSetting" ToolTip="{DynamicResource GlobalConfig}" Click="Button_Click">
                     <iconPacks:PackIconModern Width="22"
                                   Height="22"
                                   Kind="Cog"
@@ -58,11 +58,11 @@
                         <ColumnDefinition MinWidth="120"></ColumnDefinition>
                         <ColumnDefinition MaxWidth="120"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right">可执行文件完整路径：</TextBlock>
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource FullPathOfExecutable}" />
                     <TextBox Margin="10 0" Grid.Row="0"
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
-                             mah:TextBoxHelper.Watermark="填写或者选取文件的完整路径"
+                             mah:TextBoxHelper.Watermark="{DynamicResource InputOrSelectTheFullPath}"
                              Text="{Binding SelectedFile,
                                             ValidatesOnDataErrors=True, 
                                             UpdateSourceTrigger=PropertyChanged, 
@@ -71,11 +71,11 @@
                              VerticalAlignment="Center">
                         <mah:TextBoxHelper.ButtonContent>
                             <Grid>
-                                <Button x:Name="btnSelectFile" ToolTip="打开文件夹进行选取" Content="..." Click="Button_Click" />
+                                <Button x:Name="btnSelectFile" ToolTip="{DynamicResource SelectUsingFileExplorer}" Content="..." Click="Button_Click" />
                             </Grid>
                         </mah:TextBoxHelper.ButtonContent>
                     </TextBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right">进程名称：</TextBlock>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource ProcessName}" />
                     <TextBox Margin="10 16 10 0" Grid.Row="1" 
                              Grid.Column="1" 
                              Grid.ColumnSpan="3"
@@ -85,17 +85,17 @@
                                             ValidatesOnDataErrors=True, 
                                             UpdateSourceTrigger=PropertyChanged, 
                                             NotifyOnValidationError=True}"></TextBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right">仅开机自启：</TextBlock>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource StartOnlyOnce}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsOnlyOpenOnce}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">启动时最小化：</TextBlock>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource MinimizeStartup}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsMinimize}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">无窗应用：</TextBlock>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource NoWindow}" />
                     <CheckBox Margin="10 16 0 0" Grid.Row="4" Grid.Column="1" IsChecked="{Binding NoWindow}" Style="{DynamicResource MahApps.Styles.CheckBox}"></CheckBox>
-                    <TextBlock Margin="0 16 0 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">启动参数：</TextBlock>
+                    <TextBlock Margin="0 16 0 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource StartupParameters}" />
                     <TextBox Margin="10 16 10 0" Grid.Row="5"
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
-                             mah:TextBoxHelper.Watermark="可为空"
+                             mah:TextBoxHelper.Watermark="{DynamicResource CanBeLeftBlank}"
                              Text="{Binding StartupParams,
                                             UpdateSourceTrigger=PropertyChanged}"
                              Style="{DynamicResource MahApps.Styles.TextBox}" 
@@ -105,15 +105,16 @@
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center"
-                            Click="CloseCustomDialog">
+                            Click="CloseCustomDialog"
+                            mah:ControlsHelper.ContentCharacterCasing="Normal">
                         <Button.Style>
                             <Style TargetType="{x:Type ButtonBase}" BasedOn="{StaticResource MahApps.Styles.Button.Square}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=IsNew}" Value="True">
-                                        <Setter Property="Content" Value="确认添加" />
+                                        <Setter Property="Content" Value="{DynamicResource ConfirmAdd}" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=IsNew}" Value="False">
-                                        <Setter Property="Content" Value="确认修改" />
+                                        <Setter Property="Content" Value="{DynamicResource ConfirmChanges}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -126,9 +127,10 @@
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center" 
-                            Content="取消"  
+                            Content="{DynamicResource Cancel}"
                             Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
-                            Click="CloseCustomDialog"></Button>
+                            Click="CloseCustomDialog"
+                            mah:ControlsHelper.ContentCharacterCasing="Normal"></Button>
                 </Grid>
             </UserControl>
             <UserControl x:Key="CustomSettingDialog" x:Name="CustomSettingDialog">
@@ -143,7 +145,7 @@
                         <ColumnDefinition MinWidth="120"></ColumnDefinition>
                         <ColumnDefinition MaxWidth="120"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right">语言：</TextBlock>
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{DynamicResource Language}" />
                     <ComboBox Margin="10 0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center"
                               ItemsSource="{Binding Languages}"
                               SelectedValue="{Binding Path=GlobalConfig.Language}"
@@ -156,9 +158,10 @@
                             HorizontalAlignment="Right" 
                             Width="80" 
                             VerticalAlignment="Center" 
-                            Content="好了"  
+                            Content="{DynamicResource OK}"  
                             Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
-                            Click="CloseCustomDialog"></Button>
+                            Click="CloseCustomDialog"
+                            mah:ControlsHelper.ContentCharacterCasing="Normal"></Button>
                 </Grid>
             </UserControl>
         </ResourceDictionary>
@@ -184,30 +187,30 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding ProcessName}" Header="进程名称">
+                <DataGridTextColumn Width="*" Binding="{Binding ProcessName}" Header="{DynamicResource ProcessName}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding ProcessName}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}" Header="完整路径">
+                <DataGridTextColumn x:Name="FullPathColumn" Width="1.5*" Binding="{Binding EXEFullPath}" Header="{DynamicResource FullPath}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding EXEFullPath}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StartupParams}" Width="0.5*" Header="启动参数">
+                <DataGridTextColumn Binding="{Binding StartupParams}" Width="0.5*" Header="{DynamicResource StartupParameters}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource DoubleClickableCell}">
                             <Setter Property="ToolTip" Value="{Binding StartupParams}" />
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="仅开机自启" CellStyle="{StaticResource DoubleClickableCell}" />
-                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="启动时最小化" CellStyle="{StaticResource DoubleClickableCell}" />
-                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="无窗应用" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding OnlyOpenOnce}" Header="{DynamicResource StartOnlyOnce}" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="100" Binding="{Binding Minimize}" Header="{DynamicResource MinimizeStartup}" CellStyle="{StaticResource DoubleClickableCell}" />
+                <DataGridCheckBoxColumn Width="80" Binding="{Binding NoWindow}" Header="{DynamicResource NoWindow}" CellStyle="{StaticResource DoubleClickableCell}" />
                 <DataGridTemplateColumn MinWidth="30">
                     <DataGridTemplateColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
