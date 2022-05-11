@@ -3,6 +3,7 @@ using ProcessGuard.Common.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 
 namespace ProcessGuard
 {
@@ -241,12 +242,12 @@ namespace ProcessGuard
                     case nameof(SelectedFile):
                         if (string.IsNullOrWhiteSpace(SelectedFile))
                         {
-                            return "参数是必填的！";
+                            return Application.Current.FindResource("Required").ToString();
                         }
 
                         if (!File.Exists(SelectedFile) || !SelectedFile.EndsWith(".exe"))
                         {
-                            return "文件路径不正确，请检查！";
+                            return Application.Current.FindResource("InvalidFilePath").ToString();
                         }
 
                         break;
@@ -254,7 +255,7 @@ namespace ProcessGuard
                     case nameof(SeletedProcessName):
                         if (string.IsNullOrWhiteSpace(SeletedProcessName))
                         {
-                            return "参数是必填的！";
+                            return Application.Current.FindResource("Required").ToString();
                         }
                         break;
 

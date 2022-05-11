@@ -533,13 +533,13 @@ namespace ProcessGuard
 
             dict.Source = new Uri(uriString, UriKind.Relative);
 
-            var existedDict = Resources.MergedDictionaries.Where(d => d.Source.OriginalString == uriString).FirstOrDefault();
+            var existedDict = Application.Current.Resources.MergedDictionaries.Where(d => d.Source.OriginalString == uriString).FirstOrDefault();
 
-            Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Add(dict);
 
             if (existedDict != null)
             {
-                Resources.MergedDictionaries.Remove(existedDict);
+                Application.Current.Resources.MergedDictionaries.Remove(existedDict);
             }
         }
 

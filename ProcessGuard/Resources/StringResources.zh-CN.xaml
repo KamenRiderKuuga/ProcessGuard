@@ -38,5 +38,7 @@
     <system:String x:Key="NotInstalled">未安装</system:String>
     <system:String x:Key="ServiceStatus">服务状态({0})</system:String>
     <system:String x:Key="Yes">是的</system:String>
+    <system:String x:Key="Required">参数是必填的！</system:String>
+    <system:String x:Key="InvalidFilePath">文件路径无效！</system:String>
 
 </ResourceDictionary>

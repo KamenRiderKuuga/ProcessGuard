@@ -38,5 +38,7 @@
     <system:String x:Key="NotInstalled">Not Installed</system:String>
     <system:String x:Key="ServiceStatus">Service Status({0})</system:String>
     <system:String x:Key="Yes">Yes</system:String>
+    <system:String x:Key="Required">Value is required!</system:String>
+    <system:String x:Key="InvalidFilePath">Invalid file path!</system:String>
 
 </ResourceDictionary>
