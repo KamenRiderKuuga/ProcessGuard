@@ -1,45 +1,53 @@
 # ProcessGuard
 
-> 从系统服务中启动并保护指定的进程，使其在被关闭后重新启动，用于防止程序误关闭，或**用于想让任意应用程序像Windows系统服务一样保持运行的场景**
+[中文文档](README-zh.md)
 
-💡关于实现的具体依据请查看[通过Windows系统服务守护进程的运行](https://lambda.cyou/posts/Tips-5/)
+About how it works:
 
+[Subverting Vista UAC in Both 32 and 64 bit Architectures By Pero Matić](https://www.codeproject.com/Articles/35773/Subverting-Vista-UAC-in-Both-32-and-64-bit-Archite)
 
+[Application Compatibility - Session 0 Isolation By Craig Marcho](https://techcommunity.microsoft.com/t5/ask-the-performance-team/application-compatibility-session-0-isolation/ba-p/372361)
 
-## ⚙配置界面
+With the ability to start a process from the Windows service, we can:
 
-> 从[Release](https://github.com/KamenRiderKuuga/ProcessGuard/releases)页面可以直接下载程序，启动程序后看到的界面只是一个配置界面，可以在这里配置要守护的进程，启动服务之后可以随时开启或关闭此配置界面
+1. Start a program with an interactive interface from a Windows service and restart it after it has been closed
+2. Set some programs to start automatically at boot
+3. For console applications, including but not limited to `java`, `dotnet`, `node`, etc., they can be deployed on Windows systems as no window like Windows services
 
-![](https://lambda.cyou/assets/img/processguard-2.PNG)
+## ⚙Configuration Interface
 
-注：只有在界面点击启动服务，守护服务正常运行后，配置才能生效
+> You can download the program directly from the [Release](https://github.com/KamenRiderKuuga/ProcessGuard/releases) page. The interface you see is just a configuration interface for configuring the processes to be guarded here. After starting the service, you can close the configuration interface
 
+![](https://lambda.cyou/assets/img/processguard-5.PNG)
 
-
-## 📕配置说明
-
-**进程名称：** 用于标识当前配置项的名称，仅用于界面显示
-
-**完整路径：** 可执行文件的完整路径
-
-**启动参数：** 也就是平时启动应用时携带的参数，如不需要携带参数可忽略此项
-
-**仅开机自启：** 在守护服务运行期间只启动一次，用于只需要配置开机启动的场景
-
-**启动时最小化：** 对于有交互界面的程序，配置此项可以让其启动时只在任务栏出现，而不是和平时一样弹出界面
-
-**无窗应用：** 用于控制台类型的应用，对于这些没有交互界面的应用，勾选此项可以让其启动时完全不显示控制台，而作为系统服务启动
+Note: The configuration can take effect only after the service is started
 
 
 
-## 💡配置示例
+## 📕Configuration Items
 
-### 带交互界面的程序
+**Process Name:** The name used to identify the current configuration item, only used for interface display
 
-![](https://lambda.cyou/assets/img/processguard-3.PNG)
+**Full Path:** Full path to executable
+
+**Parameters:** The parameters be carried when starting the application, ignore this if you do not need any parameters
+
+**Start Once:** Only started once during the service running
+
+**Minimize:** For programs with an interactive interface, it can make it minimized to the taskbar when it starts, instead of popping up the interface as usual
+
+**NoWindow:** For console applications, enabling this item can make it start like a windows service, without displaying the console at all
 
 
 
-### Spring Boot项目
+## Configuration Example
 
-![](https://lambda.cyou/assets/img/processguard-4.PNG)
+### An Interactive Program
+
+![](https://lambda.cyou/assets/img/processguard-6.PNG)
+
+
+
+### A Spring Boot Program
+
+![](https://lambda.cyou/assets/img/processguard-7.PNG)
