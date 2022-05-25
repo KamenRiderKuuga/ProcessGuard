@@ -40,6 +40,17 @@ namespace ProcessGuard.Common.Utility
             public uint dwThreadId;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        private struct WTS_SESSION_INFO
+        {
+            public readonly uint SessionID;
+
+            [MarshalAs(UnmanagedType.LPStr)]
+            public readonly string pWinStationName;
+
+            public readonly WTS_CONNECTSTATE_CLASS State;
+        }
+
         #endregion
 
         #region Enumerations
@@ -74,6 +85,20 @@ namespace ProcessGuard.Common.Utility
             SW_RESTORE = 9,
             SW_SHOWDEFAULT = 10,
             SW_FORCEMINIMIZE = 11,
+        }
+
+        private enum WTS_CONNECTSTATE_CLASS
+        {
+            WTSActive,
+            WTSConnected,
+            WTSConnectQuery,
+            WTSShadow,
+            WTSDisconnected,
+            WTSIdle,
+            WTSListen,
+            WTSReset,
+            WTSDown,
+            WTSInit
         }
 
         #endregion
@@ -117,6 +142,12 @@ namespace ProcessGuard.Common.Utility
         [DllImport("wtsapi32.dll", SetLastError = true)]
         private static extern uint WTSQueryUserToken(uint SessionId, ref IntPtr phToken);
 
+        [DllImport("wtsapi32.dll", SetLastError = true)]
+        private static extern int WTSEnumerateSessions(IntPtr hServer, int Reserved, int Version, ref IntPtr ppSessionInfo, ref int pCount);
+
+        [DllImport("wtsapi32.dll", SetLastError = false)]
+        public static extern void WTSFreeMemory(IntPtr memory);
+
         #endregion
 
         /// <summary>
@@ -140,11 +171,10 @@ namespace ProcessGuard.Common.Utility
             {
                 procInfo = new PROCESS_INFORMATION();
 
-                // 获取当前正在使用的系统用户的session id,每一个登录到系统的用户都有一个唯一的session id
+                // 使用两种方法获取当前正在使用的系统用户的session id,每一个登录到系统的用户都有一个唯一的session id
                 // 这一步是为了可以正确在当前登录的用户界面启动程序
-                uint dwSessionId = WTSGetActiveConsoleSessionId();
-
-                if (WTSQueryUserToken(dwSessionId, ref hPToken) == 0)
+                if (WTSQueryUserToken(WTSGetActiveConsoleSessionId(), ref hPToken) == 0 &&
+                    WTSQueryUserToken(GetSessionIdFromEnumerateSessions(), ref hPToken) == 0)
                 {
                     return false;
                 }
@@ -208,6 +238,44 @@ namespace ProcessGuard.Common.Utility
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Get session id via WTSEnumerateSessions
+        /// </summary>
+        /// <returns></returns>
+        private static uint GetSessionIdFromEnumerateSessions()
+        {
+            var pSessionInfo = IntPtr.Zero;
+            try
+            {
+                var sessionCount = 0;
+
+                // Get a handle to the user access token for the current active session.
+                if (WTSEnumerateSessions(IntPtr.Zero, 0, 1, ref pSessionInfo, ref sessionCount) != 0)
+                {
+                    var arrayElementSize = Marshal.SizeOf(typeof(WTS_SESSION_INFO));
+                    var current = pSessionInfo;
+
+                    for (var i = 0; i < sessionCount; i++)
+                    {
+                        var si = (WTS_SESSION_INFO)Marshal.PtrToStructure(current, typeof(WTS_SESSION_INFO));
+                        current += arrayElementSize;
+
+                        if (si.State == WTS_CONNECTSTATE_CLASS.WTSActive)
+                        {
+                            return si.SessionID;
+                        }
+                    }
+                }
+
+                return uint.MaxValue;
+            }
+            finally
+            {
+                WTSFreeMemory(pSessionInfo);
+                CloseHandle(pSessionInfo);
+            }
         }
 
         /// <summary>
